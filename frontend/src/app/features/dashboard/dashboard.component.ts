@@ -1,87 +1,43 @@
-import { Component } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
 import { FormsModule } from "@angular/forms"
-
-interface TeamMember {
-  id: number
-  name: string
-  role: string
-  startDate: string
-  progress: number
-  status: "Concluído" | "Em andamento" | "Não iniciado" | "Atrasado"
-}
-
-interface ChartData {
-  label: string
-  value: number
-  color: string
-}
+import { DashboardService, TeamMember, ChartData } from '../../core/services/dashboard.service'
+import { HeaderComponent } from '../../shared/components/header/header.component'
 
 @Component({
   selector: "app-dashboard",
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, HeaderComponent],
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.scss"],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   selectedTeam = ""
   selectedStatus = ""
   selectedStartDate = ""
 
-  teams: string[] = ["Desenvolvimento", "Infraestrutura", "Dados", "Produto"]
+  teams: string[] = ["Desenvolvimento", "Infraestrutura", "Dados", "Produto", "Design", "QA", "Gestão"]
   statuses: string[] = ["Concluído", "Em andamento", "Não iniciado", "Atrasado"]
 
-  teamMembers: TeamMember[] = [
-    {
-      id: 1,
-      name: "João Silva",
-      role: "Desenvolvedor Backend",
-      startDate: "01/05/2025",
-      progress: 70,
-      status: "Em andamento",
-    },
-    {
-      id: 2,
-      name: "Maria Oliveira",
-      role: "Analista de Dados",
-      startDate: "15/05/2025",
-      progress: 50,
-      status: "Em andamento",
-    },
-    {
-      id: 3,
-      name: "Carlos Santos",
-      role: "Desenvolvedor Frontend",
-      startDate: "10/05/2025",
-      progress: 30,
-      status: "Atrasado",
-    },
-    {
-      id: 4,
-      name: "Ana Costa",
-      role: "DevOps Engineer",
-      startDate: "20/04/2025",
-      progress: 100,
-      status: "Concluído",
-    },
-    {
-      id: 5,
-      name: "Pedro Almeida",
-      role: "Product Manager",
-      startDate: "25/05/2025",
-      progress: 0,
-      status: "Não iniciado",
-    },
-  ]
+  teamMembers: TeamMember[] = []
+  chartData: ChartData[] = []
 
-  chartData: ChartData[] = [
-    { label: "Concluído", value: 20, color: "#10B981" },
-    { label: "Em andamento", value: 40, color: "#8B5CF6" },
-    { label: "Não iniciado", value: 20, color: "#6B7280" },
-    { label: "Atrasado", value: 20, color: "#EF4444" },
-  ]
+  constructor(private dashboardService: DashboardService) {}
+
+  ngOnInit() {
+    this.loadDashboardData();
+  }
+
+  loadDashboardData() {
+    this.dashboardService.getTeamMembers().subscribe(members => {
+      this.teamMembers = members;
+    });
+
+    this.dashboardService.getChartData().subscribe(chartData => {
+      this.chartData = chartData;
+    });
+  }
 
   get filteredMembers(): TeamMember[] {
     return this.teamMembers.filter((member) => {
@@ -140,7 +96,28 @@ export class DashboardComponent {
     this.selectedStartDate = ""
   }
 
-  onLogout(): void {
-    console.log("Logout clicked")
+  updateMemberProgress(memberId: number, newProgress: number): void {
+    this.dashboardService.updateMemberProgress(memberId, newProgress);
   }
+
+  addNewMember(): void {
+    const newMember = {
+      name: "Novo Membro",
+      role: "Função",
+      startDate: new Date().toLocaleDateString('pt-BR'),
+      progress: 0,
+      status: "Não iniciado" as const
+    };
+    this.dashboardService.addTeamMember(newMember);
+  }
+
+  simulateProgressUpdate(): void {
+    // Simular atualização de progresso para demonstração
+    const randomMember = this.teamMembers[Math.floor(Math.random() * this.teamMembers.length)];
+    if (randomMember && randomMember.progress < 100) {
+      const newProgress = Math.min(100, randomMember.progress + Math.floor(Math.random() * 20) + 5);
+      this.updateMemberProgress(randomMember.id, newProgress);
+    }
+  }
+
 }

@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { BrowserStorageService } from '../../../core/services/browser-storage.service';
+import { UserProfileService } from '../../../core/services/user-profile.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +23,9 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private storage: BrowserStorageService,
+    private userProfileService: UserProfileService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -35,7 +39,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/dashboard']);
     }
 
-    const savedEmail = localStorage.getItem('rememberedEmail');
+    const savedEmail = this.storage.getItem('rememberedEmail', 'local');
     if (savedEmail) {
       this.loginForm.patchValue({
         email: savedEmail,
@@ -43,6 +47,7 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -57,18 +62,18 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           if (lembrarMe) {
-            localStorage.setItem('rememberedEmail', email);
+            this.storage.setItem('rememberedEmail', email, 'local');
           } else {
-            localStorage.removeItem('rememberedEmail');
+            this.storage.removeItem('rememberedEmail', 'local');
           }
 
           this.toastr.success('Login realizado com sucesso!', 'Bem-vindo');
-          
-          if (response.usuario?.primeiroAcesso) {
-            this.router.navigate(['/onboarding']);
-          } else {
-            this.router.navigate(['/dashboard']);
-          }
+
+          // Aguardar um momento para o usuário ser definido e redirecionar para rota baseada no perfil
+          setTimeout(() => {
+            const defaultRoute = this.userProfileService.getDefaultRoute();
+            this.router.navigate([defaultRoute]);
+          }, 100);
         }
       },
       error: (error) => {

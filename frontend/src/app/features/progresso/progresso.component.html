@@ -1,35 +1,6 @@
 <div class="min-vh-100 vivo-gradient">
   <!-- Header -->
-  <header class="bg-white shadow-lg">
-    <div class="container-fluid">
-      <div class="d-flex justify-content-between align-items-center py-3 px-4">
-        <div class="d-flex align-items-center">
-          <div class="vivo-logo me-3">
-            <span class="text-white fw-bold">VIVO</span>
-          </div>
-          <div>
-            <h1 class="h4 mb-0 text-dark fw-bold">Vivo Knowledge</h1>
-            <p class="small text-muted mb-0">Sistema de Onboarding</p>
-          </div>
-        </div>
-
-        <nav class="d-flex align-items-center">
-          <a routerLink="/home" class="nav-link text-muted fw-medium me-4">
-            <i class="fas fa-home me-1"></i>Home
-          </a>
-          <a routerLink="/progresso" class="nav-link text-purple fw-medium me-4 active">
-            <i class="fas fa-chart-line me-1"></i>Meu Progresso
-          </a>
-          <a routerLink="/dashboard" class="nav-link text-muted fw-medium me-4">
-            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-          </a>
-          <button class="btn btn-outline-purple" (click)="onLogout()">
-            <i class="fas fa-sign-out-alt me-1"></i>Sair
-          </button>
-        </nav>
-      </div>
-    </div>
-  </header>
+  <app-header></app-header>
 
   <!-- Main Content -->
   <main class="container-fluid py-4">
@@ -65,7 +36,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between text-muted small">
-                      <span>{{ completedItems }} de {{ totalItems }} tópicos concluídos</span>
+                      <span>{{ completedItems }} de {{ totalItems }} tï¿½picos concluï¿½dos</span>
                       <span>Tempo estimado restante: {{ estimatedTimeRemaining }}</span>
                     </div>
                   </div>
@@ -78,10 +49,10 @@
                         <i class="fas fa-trophy text-warning" style="font-size: 2.5rem;"></i>
                       </div>
                       <h3 class="h4 fw-bold text-dark">{{ completedItems }}</h3>
-                      <p class="text-muted mb-2">Tópicos Concluídos</p>
+                      <p class="text-muted mb-2">Tï¿½picos Concluï¿½dos</p>
                       <small class="text-success">
                         <i class="fas fa-check-circle me-1"></i>
-                        Parabéns pelo progresso!
+                        Parabï¿½ns pelo progresso!
                       </small>
                     </div>
                   </div>
@@ -96,7 +67,7 @@
               <div class="section-card p-4 rounded-3">
                 <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
                   <i class="fas fa-check-circle text-success me-2"></i>
-                  Concluídos ({{ completedItems }})
+                  Concluï¿½dos ({{ completedItems }})
                 </h4>
 
                 <div class="items-list">
@@ -114,7 +85,7 @@
                           <span class="badge bg-light text-dark">{{ item.category }}</span>
                           <small class="text-success">
                             <i class="fas fa-calendar me-1"></i>
-                            Concluído em {{ item.completedDate }}
+                            Concluï¿½do em {{ item.completedDate }}
                           </small>
                         </div>
                       </div>
@@ -124,7 +95,7 @@
 
                 <div *ngIf="completedItemsList.length === 0" class="text-center py-4">
                   <i class="fas fa-clipboard-list text-muted mb-2" style="font-size: 2rem;"></i>
-                  <p class="text-muted">Nenhum tópico concluído ainda.</p>
+                  <p class="text-muted">Nenhum tï¿½pico concluï¿½do ainda.</p>
                 </div>
               </div>
             </div>
@@ -168,8 +139,8 @@
 
                 <div *ngIf="pendingItemsList.length === 0" class="text-center py-4">
                   <i class="fas fa-star text-success mb-2" style="font-size: 2rem;"></i>
-                  <h6 class="text-success">Parabéns!</h6>
-                  <p class="text-muted">Todos os tópicos foram concluídos!</p>
+                  <h6 class="text-success">Parabï¿½ns!</h6>
+                  <p class="text-muted">Todos os tï¿½picos foram concluï¿½dos!</p>
                 </div>
               </div>
             </div>

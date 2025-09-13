@@ -51,15 +51,16 @@ namespace backend.Utils
                     Console.WriteLine("✅ Perfis criados com sucesso");
                 }
 
-                // Criar usuário admin se não existir
-                if (!await context.Usuarios.AnyAsync(u => u.Email == "admin@vivo.com.br"))
+                // Criar ou atualizar usuário admin
+                var adminUser = await context.Usuarios.FirstOrDefaultAsync(u => u.Email == "admin@vivo.com.br");
+                if (adminUser == null)
                 {
                     Console.WriteLine("👤 Criando usuário administrador...");
                     
                     var perfilAdmin = await context.Perfis.FirstAsync(p => p.Nome == "Administrador");
                     Console.WriteLine($"📝 Perfil Admin encontrado: ID {perfilAdmin.Id}");
                     
-                    var admin = new Usuario
+                    adminUser = new Usuario
                     {
                         Email = "admin@vivo.com.br",
                         Senha = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
@@ -71,14 +72,25 @@ namespace backend.Utils
                         Cargo = "Administrador"
                     };
 
-                    Console.WriteLine($"🔐 Hash da senha gerado com {admin.Senha.Length} caracteres");
-                    context.Usuarios.Add(admin);
+                    Console.WriteLine($"🔐 Hash da senha gerado com {adminUser.Senha.Length} caracteres");
+                    context.Usuarios.Add(adminUser);
                     await context.SaveChangesAsync();
                     Console.WriteLine("✅ Usuário admin criado: admin@vivo.com.br / Admin@123");
                 }
                 else
                 {
-                    Console.WriteLine("ℹ️ Usuário admin já existe, pulando criação");
+                    // Verificar se o hash da senha está correto
+                    if (adminUser.Senha.Length < 50) // BCrypt hash deve ter ~60 caracteres
+                    {
+                        Console.WriteLine("🔧 Corrigindo hash da senha do admin...");
+                        adminUser.Senha = BCrypt.Net.BCrypt.HashPassword("Admin@123");
+                        await context.SaveChangesAsync();
+                        Console.WriteLine("✅ Hash da senha do admin corrigido");
+                    }
+                    else
+                    {
+                        Console.WriteLine("ℹ️ Usuário admin já existe com hash válido");
+                    }
                 }
 
                 // Criar usuários de teste
@@ -89,10 +101,31 @@ namespace backend.Utils
                     ("carlos.santos@vivo.com.br", "Carlos Santos", "Frontend", "Desenvolvedor Frontend")
                 };
 
+                // Criar usuário gestor
+                var perfilGestor = await context.Perfis.FirstAsync(p => p.Nome == "Gestor");
+                if (!await context.Usuarios.AnyAsync(u => u.Email == "gestor@vivo.com.br"))
+                {
+                    var gestorUser = new Usuario
+                    {
+                        Email = "gestor@vivo.com.br",
+                        Senha = BCrypt.Net.BCrypt.HashPassword("Gestor@123"),
+                        NomeCompleto = "Ana Gestora",
+                        PerfilId = perfilGestor.Id,
+                        Ativo = true,
+                        PrimeiroAcesso = false,
+                        Departamento = "Gestão",
+                        Cargo = "Gerente de Equipe",
+                        DataAdmissao = DateTime.Now.AddDays(-60)
+                    };
+
+                    context.Usuarios.Add(gestorUser);
+                    Console.WriteLine("✅ Usuário gestor criado: gestor@vivo.com.br / Gestor@123");
+                }
+
                 var perfilColaborador = await context.Perfis.FirstAsync(p => p.Nome == "Colaborador");
-                var adminUser = await context.Usuarios.FirstOrDefaultAsync(u => u.Email == "admin@vivo.com.br");
+                var adminUserRef = await context.Usuarios.FirstOrDefaultAsync(u => u.Email == "admin@vivo.com.br");
                 
-                if (adminUser == null)
+                if (adminUserRef == null)
                 {
                     Console.WriteLine("⚠️ Usuário admin não foi encontrado após criação");
                     return;
@@ -112,7 +145,7 @@ namespace backend.Utils
                             PrimeiroAcesso = true,
                             Departamento = depto,
                             Cargo = cargo,
-                            GestorId = adminUser.Id,
+                            GestorId = adminUserRef.Id,
                             DataAdmissao = DateTime.Now.AddDays(-30)
                         };
 
@@ -129,8 +162,9 @@ namespace backend.Utils
                 var usuarios = await context.Usuarios.Include(u => u.Perfil).ToListAsync();
                 foreach (var u in usuarios)
                 {
-                    Console.WriteLine($"📧 {u.Email} | Perfil: {u.Perfil?.Nome} | Senha: " + 
-                                    (u.Email.Contains("admin") ? "Admin@123" : "Senha@123"));
+                    string senha = u.Email.Contains("admin") ? "Admin@123" :
+                                  u.Email.Contains("gestor") ? "Gestor@123" : "Senha@123";
+                    Console.WriteLine($"📧 {u.Email} | Perfil: {u.Perfil?.Nome} | Senha: {senha}");
                 }
                 Console.WriteLine("====================================\n");
             }

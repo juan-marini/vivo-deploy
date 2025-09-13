@@ -1,35 +1,6 @@
 <div class="min-vh-100 vivo-gradient">
   <!-- Header -->
-  <header class="bg-white shadow-lg">
-    <div class="container-fluid">
-      <div class="d-flex justify-content-between align-items-center py-3 px-4">
-        <div class="d-flex align-items-center">
-          <div class="vivo-logo me-3">
-            <span class="text-white fw-bold">VIVO</span>
-          </div>
-          <div>
-            <h1 class="h4 mb-0 text-dark fw-bold">Vivo Knowledge</h1>
-            <p class="small text-muted mb-0">Sistema de Onboarding</p>
-          </div>
-        </div>
-
-        <nav class="d-flex align-items-center">
-          <a routerLink="/home" class="nav-link text-muted fw-medium me-4">
-            <i class="fas fa-home me-1"></i>Home
-          </a>
-          <a routerLink="/progresso" class="nav-link text-muted fw-medium me-4">
-            <i class="fas fa-chart-line me-1"></i>Meu Progresso
-          </a>
-          <a routerLink="/dashboard" class="nav-link text-purple fw-medium me-4 active">
-            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-          </a>
-          <button class="btn btn-outline-purple" (click)="onLogout()">
-            <i class="fas fa-sign-out-alt me-1"></i>Sair
-          </button>
-        </nav>
-      </div>
-    </div>
-  </header>
+  <app-header></app-header>
 
   <!-- Main Content -->
   <main class="container-fluid py-4">
@@ -89,7 +60,12 @@
             <div class="col-12 col-lg-8">
               <!-- Filters -->
               <div class="filters-section mb-4">
-                <h4 class="h5 fw-bold text-dark mb-3">Filtros</h4>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h4 class="h5 fw-bold text-dark mb-0">Filtros</h4>
+                  <button class="btn btn-sm btn-outline-purple" (click)="simulateProgressUpdate()" title="Simular atualização de progresso">
+                    <i class="fas fa-sync-alt me-1"></i>Simular Progresso
+                  </button>
+                </div>
                 <div class="row g-3">
                   <div class="col-12 col-md-4">
                     <select class="form-select" [(ngModel)]="selectedTeam">

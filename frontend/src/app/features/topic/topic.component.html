@@ -1,35 +1,6 @@
 <div class="min-vh-100 vivo-gradient">
   <!-- Header -->
-  <header class="bg-white shadow-lg">
-    <div class="container-fluid">
-      <div class="d-flex justify-content-between align-items-center py-3 px-4">
-        <div class="d-flex align-items-center">
-          <div class="vivo-logo me-3">
-            <span class="text-white fw-bold">VIVO</span>
-          </div>
-          <div>
-            <h1 class="h4 mb-0 text-dark fw-bold">Vivo Knowledge</h1>
-            <p class="small text-muted mb-0">Sistema de Onboarding</p>
-          </div>
-        </div>
-
-        <nav class="d-flex align-items-center">
-          <a routerLink="/home" class="nav-link text-muted fw-medium me-4">
-            <i class="fas fa-home me-1"></i>Home
-          </a>
-          <a routerLink="/progresso" class="nav-link text-muted fw-medium me-4">
-            <i class="fas fa-chart-line me-1"></i>Meu Progresso
-          </a>
-          <a routerLink="/dashboard" class="nav-link text-muted fw-medium me-4">
-            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-          </a>
-          <button class="btn btn-outline-purple" (click)="onLogout()">
-            <i class="fas fa-sign-out-alt me-1"></i>Sair
-          </button>
-        </nav>
-      </div>
-    </div>
-  </header>
+  <app-header></app-header>
 
   <!-- Main Content -->
   <main class="container-fluid py-4" *ngIf="topic">
@@ -59,7 +30,7 @@
                   <span
                     *ngIf="topic.isCompleted"
                     class="badge bg-success">
-                    <i class="fas fa-check me-1"></i>Concluído
+                    <i class="fas fa-check me-1"></i>ConcluÃ­do
                   </span>
                 </div>
               </div>
@@ -68,7 +39,7 @@
                 *ngIf="!topic.isCompleted"
                 class="btn btn-success"
                 (click)="markAsCompleted()">
-                <i class="fas fa-check me-2"></i>Marcar como Concluído
+                <i class="fas fa-check me-2"></i>Marcar como ConcluÃ­do
               </button>
             </div>
 
@@ -108,7 +79,7 @@
 
                 <div *ngIf="topic.documents.length === 0" class="text-center py-3">
                   <i class="fas fa-folder-open text-muted mb-2"></i>
-                  <p class="text-muted small">Nenhum documento disponível</p>
+                  <p class="text-muted small">Nenhum documento disponÃ­vel</p>
                 </div>
               </div>
             </div>
@@ -118,7 +89,7 @@
               <div class="section-card p-4 rounded-3 h-100">
                 <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
                   <i class="fas fa-link text-info me-2"></i>
-                  Links Úteis ({{ topic.links.length }})
+                  Links ï¿½teis ({{ topic.links.length }})
                 </h4>
 
                 <div class="links-list">
@@ -143,7 +114,7 @@
 
                 <div *ngIf="topic.links.length === 0" class="text-center py-3">
                   <i class="fas fa-link text-muted mb-2"></i>
-                  <p class="text-muted small">Nenhum link disponível</p>
+                  <p class="text-muted small">Nenhum link disponÃ­vel</p>
                 </div>
               </div>
             </div>
@@ -153,7 +124,7 @@
               <div class="section-card p-4 rounded-3 h-100">
                 <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
                   <i class="fas fa-users text-success me-2"></i>
-                  Contatos de Referência ({{ topic.contacts.length }})
+                  Contatos de ReferÃªncia ({{ topic.contacts.length }})
                 </h4>
 
                 <div class="contacts-list">
@@ -188,7 +159,7 @@
 
                 <div *ngIf="topic.contacts.length === 0" class="text-center py-3">
                   <i class="fas fa-user-friends text-muted mb-2"></i>
-                  <p class="text-muted small">Nenhum contato disponível</p>
+                  <p class="text-muted small">Nenhum contato disponÃ­vel</p>
                 </div>
               </div>
             </div>
@@ -197,15 +168,15 @@
           <!-- Action Section -->
           <div class="mt-5 text-center" *ngIf="!topic.isCompleted">
             <div class="action-section p-4 rounded-3">
-              <h5 class="fw-bold text-dark mb-3">Pronto para concluir este tópico?</h5>
+              <h5 class="fw-bold text-dark mb-3">Pronto para concluir este tÃ³pico?</h5>
               <p class="text-muted mb-4">
-                Após estudar todos os materiais e entrar em contato com as referências necessárias,
-                marque este tópico como concluído.
+                ApÃ³s estudar todos os materiais e entrar em contato com as referÃªncias necessÃ¡rias,
+                marque este tÃ³pico como concluÃ­do.
               </p>
               <button
                 class="btn btn-purple btn-lg"
                 (click)="markAsCompleted()">
-                <i class="fas fa-check me-2"></i>Marcar como Concluído
+                <i class="fas fa-check me-2"></i>Marcar como ConcluÃ­do
               </button>
             </div>
           </div>
@@ -214,9 +185,9 @@
           <div class="mt-5 text-center" *ngIf="topic.isCompleted">
             <div class="completion-section p-4 rounded-3">
               <i class="fas fa-trophy text-warning mb-3" style="font-size: 3rem;"></i>
-              <h5 class="fw-bold text-success mb-3">Tópico Concluído!</h5>
+              <h5 class="fw-bold text-success mb-3">TÃ³pico ConcluÃ­do!</h5>
               <p class="text-muted mb-4">
-                Parabéns! Você concluiu com sucesso o estudo de {{ topic.title }}.
+                ParabÃ©ns! VocÃª concluiu com sucesso o estudo de {{ topic.title }}.
               </p>
               <button
                 class="btn btn-outline-purple"
@@ -236,10 +207,10 @@
       <div class="col-12 col-md-6">
         <div class="bg-white rounded-4 shadow-lg p-5 text-center">
           <i class="fas fa-exclamation-triangle text-warning mb-3" style="font-size: 3rem;"></i>
-          <h3 class="fw-bold text-dark mb-3">Tópico não encontrado</h3>
-          <p class="text-muted mb-4">O tópico que você está procurando não existe ou foi removido.</p>
+          <h3 class="fw-bold text-dark mb-3">TÃ³pico nÃ£o encontrado</h3>
+          <p class="text-muted mb-4">O tÃ³pico que vocÃª estÃ¡ procurando nÃ£o existe ou foi removido.</p>
           <button class="btn btn-purple" routerLink="/home">
-            <i class="fas fa-home me-2"></i>Voltar ao Início
+            <i class="fas fa-home me-2"></i>Voltar ao InÃ­cio
           </button>
         </div>
       </div>

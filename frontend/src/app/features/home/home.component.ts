@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TopicService, Topic } from '../../core/services/topic.service';
+import { ProgressService } from '../../core/services/progress.service';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 
-interface Topic {
+interface TopicDisplay {
   id: number;
   title: string;
   description: string;
@@ -17,70 +20,55 @@ interface Topic {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, HeaderComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   searchTerm = '';
   selectedTag = '';
 
   tags = ['Banco de Dados', 'Ferramentas', 'RH', 'Desenvolvimento', 'Infraestrutura'];
 
-  topics: Topic[] = [
-    {
-      id: 1,
-      title: 'SQL Server',
-      description: 'Banco de dados principal da empresa',
-      tags: ['Banco de Dados', 'Infraestrutura'],
-      docsCount: 3,
-      linksCount: 2,
-      contactsCount: 1,
-      isCompleted: false
-    },
-    {
-      id: 2,
-      title: 'Oracle',
-      description: 'Banco de dados secundário',
-      tags: ['Banco de Dados'],
-      docsCount: 2,
-      linksCount: 1,
-      contactsCount: 1,
-      isCompleted: false
-    },
-    {
-      id: 3,
-      title: 'MongoDB',
-      description: 'Banco de dados NoSQL para projetos específicos',
-      tags: ['Banco de Dados', 'Desenvolvimento'],
-      docsCount: 4,
-      linksCount: 3,
-      contactsCount: 2,
-      isCompleted: false
-    },
-    {
-      id: 4,
-      title: 'Ferramentas de Desenvolvimento',
-      description: 'IDEs, frameworks e bibliotecas utilizadas',
-      tags: ['Ferramentas', 'Desenvolvimento'],
-      docsCount: 8,
-      linksCount: 5,
-      contactsCount: 3,
-      isCompleted: true
-    },
-    {
-      id: 5,
-      title: 'Políticas de RH',
-      description: 'Diretrizes e procedimentos de recursos humanos',
-      tags: ['RH'],
-      docsCount: 6,
-      linksCount: 2,
-      contactsCount: 4,
-      isCompleted: false
-    }
-  ];
+  topics: TopicDisplay[] = [];
+  progressStats = {
+    completed: 0,
+    total: 0,
+    percentage: 0
+  };
 
-  get filteredTopics(): Topic[] {
+  constructor(
+    private topicService: TopicService,
+    private progressService: ProgressService
+  ) {}
+
+  ngOnInit() {
+    this.loadTopics();
+    this.loadProgressStats();
+  }
+
+  loadProgressStats() {
+    this.progressService.getProgressStats().subscribe(stats => {
+      this.progressStats = stats;
+    });
+  }
+
+  loadTopics() {
+    this.topicService.getTopics().subscribe(topicsData => {
+      this.topics = topicsData.map(topic => ({
+        id: topic.id,
+        title: topic.title,
+        description: topic.description,
+        tags: [topic.category],
+        docsCount: topic.documents.length,
+        linksCount: topic.links.length,
+        contactsCount: topic.contacts.length,
+        isCompleted: topic.isCompleted
+      }));
+    });
+  }
+
+  get filteredTopics(): TopicDisplay[] {
     return this.topics.filter(topic => {
       const matchesSearch = !this.searchTerm ||
         topic.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
@@ -97,7 +85,4 @@ export class HomeComponent {
     this.selectedTag = '';
   }
 
-  onLogout() {
-    console.log('Logout clicked');
-  }
 }

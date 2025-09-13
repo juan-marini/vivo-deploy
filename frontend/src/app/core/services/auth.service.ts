@@ -5,6 +5,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../enviroments/enviroment';
 import { LoginRequest, LoginResponse, Usuario } from '../models/auth.model';
+import { BrowserStorageService } from './browser-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +20,14 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private storage: BrowserStorageService
   ) {
     const storedUser = this.getStoredUser();
     this.currentUserSubject = new BehaviorSubject<Usuario | null>(storedUser);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && !!window.sessionStorage && !!window.localStorage;
-  }
 
   public get currentUserValue(): Usuario | null {
     return this.currentUserSubject.value;
@@ -100,33 +99,28 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    if (!this.isBrowser()) return null;
-    return sessionStorage.getItem(this.tokenKey) || localStorage.getItem(this.tokenKey);
+    return this.storage.getItem(this.tokenKey, 'session') || this.storage.getItem(this.tokenKey, 'local');
   }
 
   private getRefreshToken(): string | null {
-    if (!this.isBrowser()) return null;
-    return sessionStorage.getItem(this.refreshTokenKey) || localStorage.getItem(this.refreshTokenKey);
+    return this.storage.getItem(this.refreshTokenKey, 'session') || this.storage.getItem(this.refreshTokenKey, 'local');
   }
 
   private storeTokens(token: string, refreshToken?: string): void {
-    if (!this.isBrowser()) return;
-    const storage = localStorage.getItem('rememberedEmail') ? localStorage : sessionStorage;
-    storage.setItem(this.tokenKey, token);
+    const storageType = this.storage.getItem('rememberedEmail', 'local') ? 'local' : 'session';
+    this.storage.setItem(this.tokenKey, token, storageType);
     if (refreshToken) {
-      storage.setItem(this.refreshTokenKey, refreshToken);
+      this.storage.setItem(this.refreshTokenKey, refreshToken, storageType);
     }
   }
 
   private storeUser(user: Usuario): void {
-    if (!this.isBrowser()) return;
-    const storage = localStorage.getItem('rememberedEmail') ? localStorage : sessionStorage;
-    storage.setItem(this.userKey, JSON.stringify(user));
+    const storageType = this.storage.getItem('rememberedEmail', 'local') ? 'local' : 'session';
+    this.storage.setItem(this.userKey, JSON.stringify(user), storageType);
   }
 
   private getStoredUser(): Usuario | null {
-    if (!this.isBrowser()) return null;
-    const userJson = sessionStorage.getItem(this.userKey) || localStorage.getItem(this.userKey);
+    const userJson = this.storage.getItem(this.userKey, 'session') || this.storage.getItem(this.userKey, 'local');
     if (userJson) {
       try {
         return JSON.parse(userJson);
@@ -138,19 +132,17 @@ export class AuthService {
   }
 
   private clearStorage(): void {
-    if (!this.isBrowser()) return;
+    this.storage.removeItem(this.tokenKey, 'session');
+    this.storage.removeItem(this.refreshTokenKey, 'session');
+    this.storage.removeItem(this.userKey, 'session');
 
-    sessionStorage.removeItem(this.tokenKey);
-    sessionStorage.removeItem(this.refreshTokenKey);
-    sessionStorage.removeItem(this.userKey);
-
-    const rememberedEmail = localStorage.getItem('rememberedEmail');
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.refreshTokenKey);
-    localStorage.removeItem(this.userKey);
+    const rememberedEmail = this.storage.getItem('rememberedEmail', 'local');
+    this.storage.removeItem(this.tokenKey, 'local');
+    this.storage.removeItem(this.refreshTokenKey, 'local');
+    this.storage.removeItem(this.userKey, 'local');
 
     if (rememberedEmail) {
-      localStorage.setItem('rememberedEmail', rememberedEmail);
+      this.storage.setItem('rememberedEmail', rememberedEmail, 'local');
     }
   }
 
