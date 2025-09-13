@@ -3,14 +3,14 @@
   <app-header></app-header>
 
   <!-- Main Content -->
-  <main class="container-fluid py-4">
+  <main class="container-fluid py-5" style="background: var(--gray-50);">
     <div class="row justify-content-center">
-      <div class="col-12">
-        <div class="bg-white rounded-4 shadow-lg p-4 p-md-5">
+      <div class="col-12" style="max-width: 1400px;">
+        <div class="professional-card">
           <!-- Header -->
           <div class="mb-5">
-            <h2 class="h3 fw-bold text-dark mb-4 d-flex align-items-center">
-              <i class="fas fa-tachometer-alt text-purple me-3"></i>
+            <h2 class="title-corporate h2 d-flex align-items-center">
+              <i class="fas fa-tachometer-alt me-3" style="color: var(--vivo-purple);"></i>
               Dashboard do Gestor
             </h2>
 
@@ -62,7 +62,7 @@
               <div class="filters-section mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                   <h4 class="h5 fw-bold text-dark mb-0">Filtros</h4>
-                  <button class="btn btn-sm btn-outline-purple" (click)="simulateProgressUpdate()" title="Simular atualização de progresso">
+                  <button class="btn-vivo-secondary btn-sm" (click)="simulateProgressUpdate()" title="Simular atualização de progresso">
                     <i class="fas fa-sync-alt me-1"></i>Simular Progresso
                   </button>
                 </div>
@@ -144,12 +144,8 @@
               <div class="chart-section">
                 <h4 class="h5 fw-bold text-dark mb-3">Distribuição de Status</h4>
                 <div class="chart-container">
-                  <!-- Simple Pie Chart Representation -->
-                  <div class="pie-chart mx-auto mb-4">
-                    <div class="pie-slice pie-slice-1"></div>
-                    <div class="pie-slice pie-slice-2"></div>
-                    <div class="pie-slice pie-slice-3"></div>
-                    <div class="pie-slice pie-slice-4"></div>
+                  <!-- Dynamic Pie Chart -->
+                  <div class="pie-chart mx-auto mb-4" [style]="getPieChartStyle()">
                     <div class="pie-center">
                       <span class="h6 fw-bold text-dark">{{ totalMembers }}</span>
                       <small class="text-muted d-block">Total</small>

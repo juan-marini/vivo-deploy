@@ -102,12 +102,7 @@
   height: 150px;
   border-radius: 50%;
   position: relative;
-  background: conic-gradient(
-    #10B981 0deg 72deg,
-    #8B5CF6 72deg 216deg,
-    #6B7280 216deg 288deg,
-    #EF4444 288deg 360deg
-  );
+  background: #f3f4f6; // Default fallback color
   display: flex;
   align-items: center;
   justify-content: center;

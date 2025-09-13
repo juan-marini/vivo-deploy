@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TopicService, Topic } from '../../core/services/topic.service';
 import { ProgressService } from '../../core/services/progress.service';
+import { AuthService } from '../../core/services/auth.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 
 interface TopicDisplay {
@@ -39,12 +40,25 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private topicService: TopicService,
-    private progressService: ProgressService
+    private progressService: ProgressService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.loadTopics();
+    this.loadUserTopics();
     this.loadProgressStats();
+  }
+
+  loadUserTopics() {
+    // Carregar tópicos específicos do usuário logado
+    const currentUser = this.authService.currentUserValue;
+    const userId = currentUser?.email || 'default';
+
+    // Carregar tópicos individuais do usuário
+    this.topicService.loadUserTopics(userId);
+
+    // Depois carregar todos os tópicos
+    this.loadTopics();
   }
 
   loadProgressStats() {

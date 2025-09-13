@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { TopicService } from './topic.service';
 
 export interface TeamMember {
-  id: number;
+  id: string;
   name: string;
   role: string;
   startDate: string;
@@ -23,7 +23,7 @@ export interface ChartData {
 export class DashboardService {
   private teamMembersSubject = new BehaviorSubject<TeamMember[]>([
     {
-      id: 1,
+      id: "joao.silva@vivo.com.br",
       name: "João Silva",
       role: "Desenvolvedor Backend",
       startDate: "01/05/2025",
@@ -31,74 +31,18 @@ export class DashboardService {
       status: "Não iniciado",
     },
     {
-      id: 2,
+      id: "maria.oliveira@vivo.com.br",
       name: "Maria Oliveira",
       role: "Analista de Dados",
       startDate: "15/05/2025",
-      progress: 83,
-      status: "Em andamento",
+      progress: 0,
+      status: "Não iniciado",
     },
     {
-      id: 3,
+      id: "carlos.santos@vivo.com.br",
       name: "Carlos Santos",
       role: "Desenvolvedor Frontend",
       startDate: "10/05/2025",
-      progress: 33,
-      status: "Atrasado",
-    },
-    {
-      id: 4,
-      name: "Ana Costa",
-      role: "DevOps Engineer",
-      startDate: "20/04/2025",
-      progress: 100,
-      status: "Concluído",
-    },
-    {
-      id: 5,
-      name: "Pedro Almeida",
-      role: "Product Manager",
-      startDate: "25/05/2025",
-      progress: 67,
-      status: "Em andamento",
-    },
-    {
-      id: 6,
-      name: "Lucia Fernandes",
-      role: "Designer UX/UI",
-      startDate: "03/05/2025",
-      progress: 50,
-      status: "Em andamento",
-    },
-    {
-      id: 7,
-      name: "Roberto Sousa",
-      role: "Analista de Infraestrutura",
-      startDate: "12/05/2025",
-      progress: 17,
-      status: "Atrasado",
-    },
-    {
-      id: 8,
-      name: "Fernanda Lima",
-      role: "QA Engineer",
-      startDate: "08/05/2025",
-      progress: 100,
-      status: "Concluído",
-    },
-    {
-      id: 9,
-      name: "Marcos Pereira",
-      role: "Scrum Master",
-      startDate: "28/04/2025",
-      progress: 83,
-      status: "Em andamento",
-    },
-    {
-      id: 10,
-      name: "Camila Torres",
-      role: "Desenvolvedora Full Stack",
-      startDate: "06/05/2025",
       progress: 0,
       status: "Não iniciado",
     },
@@ -108,11 +52,30 @@ export class DashboardService {
 
   constructor(private topicService: TopicService) {
     this.loadMembersFromStorage();
-    this.updateProgressBasedOnTopics();
+    this.updateProgressForAllMembers();
   }
 
   getTeamMembers(): Observable<TeamMember[]> {
     return this.teamMembers$;
+  }
+
+  private updateProgressForAllMembers(): void {
+    const currentMembers = this.teamMembersSubject.value;
+    const updatedMembers = currentMembers.map(member => {
+      const progressStats = this.topicService.getCompletionStatsForUser(member.id);
+      return {
+        ...member,
+        progress: progressStats.percentage,
+        status: this.calculateStatusFromProgress(progressStats.percentage)
+      };
+    });
+
+    this.teamMembersSubject.next(updatedMembers);
+    this.saveMembersToStorage(updatedMembers);
+  }
+
+  refreshMemberProgress(): void {
+    this.updateProgressForAllMembers();
   }
 
   getChartData(): Observable<ChartData[]> {
@@ -150,7 +113,7 @@ export class DashboardService {
     });
   }
 
-  updateMemberProgress(memberId: number, newProgress: number): void {
+  updateMemberProgress(memberId: string, newProgress: number): void {
     const currentMembers = this.teamMembersSubject.value;
     const updatedMembers = currentMembers.map(member => {
       if (member.id === memberId) {
@@ -165,15 +128,7 @@ export class DashboardService {
     this.saveMembersToStorage(updatedMembers);
   }
 
-  addTeamMember(member: Omit<TeamMember, 'id'>): void {
-    const currentMembers = this.teamMembersSubject.value;
-    const newId = Math.max(...currentMembers.map(m => m.id), 0) + 1;
-    const newMember: TeamMember = { ...member, id: newId };
-
-    const updatedMembers = [...currentMembers, newMember];
-    this.teamMembersSubject.next(updatedMembers);
-    this.saveMembersToStorage(updatedMembers);
-  }
+  // Método removido - membros vêm do ColaboradorService
 
   getStatsSummary(): Observable<{
     total: number;
@@ -216,54 +171,7 @@ export class DashboardService {
     return "Em andamento";
   }
 
-  private updateProgressBasedOnTopics(): void {
-    this.topicService.topics$.subscribe(topics => {
-      const completionStats = this.topicService.getCompletionStats();
-
-      const currentMembers = this.teamMembersSubject.value;
-      const currentUserMember = currentMembers.find(m => m.name === "João Silva");
-
-      if (currentUserMember && currentUserMember.progress !== completionStats.percentage) {
-        this.updateMemberProgress(currentUserMember.id, completionStats.percentage);
-      }
-
-      // Simular progresso dinâmico para outros membros baseado no tempo
-      this.simulateTeamProgress();
-    });
-  }
-
-  private simulateTeamProgress(): void {
-    const currentMembers = this.teamMembersSubject.value;
-    const now = new Date();
-
-    const updatedMembers = currentMembers.map(member => {
-      if (member.name === "João Silva") {
-        return member; // João Silva é controlado pelo progresso real dos tópicos
-      }
-
-      // Simular progresso baseado no tempo desde a data de início
-      const startDate = new Date(member.startDate.split('/').reverse().join('-'));
-      const daysSinceStart = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-
-      // Progresso base + variação aleatória
-      let newProgress = Math.min(100, Math.max(0, daysSinceStart * 8 + Math.random() * 20));
-
-      // Manter alguns membros com progresso específico para demonstração
-      if (member.id === 4 || member.id === 8) newProgress = 100; // Mantém concluídos
-      if (member.id === 10) newProgress = Math.min(15, newProgress); // Mantém iniciante
-
-      const newStatus = this.calculateStatusFromProgress(newProgress);
-
-      return {
-        ...member,
-        progress: Math.round(newProgress),
-        status: newStatus
-      };
-    });
-
-    this.teamMembersSubject.next(updatedMembers);
-    this.saveMembersToStorage(updatedMembers);
-  }
+  // Métodos de simulação removidos - agora usa progresso real individual
 
   private loadMembersFromStorage(): void {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -286,6 +194,56 @@ export class DashboardService {
       } catch (error) {
         console.error('Error saving team members to storage:', error);
       }
+    }
+  }
+
+  resetAllMembersData(): void {
+    // Reset all team members to initial state with 0 progress and "Não iniciado" status
+    const resetMembers: TeamMember[] = [
+      {
+        id: "joao.silva@vivo.com.br",
+        name: "João Silva",
+        role: "Desenvolvedor Backend",
+        startDate: "01/05/2025",
+        progress: 0,
+        status: "Não iniciado",
+      },
+      {
+        id: "maria.oliveira@vivo.com.br",
+        name: "Maria Oliveira",
+        role: "Analista de Dados",
+        startDate: "15/05/2025",
+        progress: 0,
+        status: "Não iniciado",
+      },
+      {
+        id: "carlos.santos@vivo.com.br",
+        name: "Carlos Santos",
+        role: "Desenvolvedor Frontend",
+        startDate: "10/05/2025",
+        progress: 0,
+        status: "Não iniciado",
+      },
+    ];
+
+    this.teamMembersSubject.next(resetMembers);
+    this.saveMembersToStorage(resetMembers);
+
+    // Limpar também os tópicos individuais de cada usuário
+    this.clearAllUserTopics();
+  }
+
+  private clearAllUserTopics(): void {
+    const userIds = [
+      "joao.silva@vivo.com.br",
+      "maria.oliveira@vivo.com.br",
+      "carlos.santos@vivo.com.br"
+    ];
+
+    if (typeof window !== 'undefined' && window.localStorage) {
+      userIds.forEach(userId => {
+        localStorage.removeItem(`topics_${userId}`);
+      });
     }
   }
 }

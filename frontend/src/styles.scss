@@ -1,6 +1,7 @@
 /* Imports */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import '@fortawesome/fontawesome-free/css/all.min.css';
+@import './styles/variables.scss';
 
 /* Reset global e estilos base */
 * {
@@ -15,18 +16,139 @@ html, body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: linear-gradient(135deg, #660099 0%, #9900cc 50%, #cc00ff 100%);
-  background-attachment: fixed;
-  background-size: 100% 100%;
+  background: var(--gray-50);
   min-height: 100vh;
+  color: var(--gray-900);
 }
 
 app-root {
   display: block;
   width: 100%;
   min-height: 100vh;
+}
+
+/* Estilos Corporativos */
+.vivo-gradient {
+  background: var(--gray-50);
+  min-height: 100vh;
+}
+
+.vivo-container {
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+  min-height: 100vh;
+}
+
+/* Cards Profissionais */
+.professional-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-2xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Botões Corporativos */
+.btn-vivo-primary {
+  background: var(--vivo-purple-gradient);
+  border: none;
+  color: var(--white);
+  font-weight: var(--font-weight-semibold);
+  padding: 12px 24px;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.btn-vivo-secondary {
+  background: transparent;
+  border: 1.5px solid var(--vivo-purple);
+  color: var(--vivo-purple);
+  font-weight: var(--font-weight-semibold);
+  padding: 12px 24px;
+  border-radius: var(--border-radius-md);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: var(--vivo-purple);
+    color: var(--white);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Tipografia Corporativa */
+.title-corporate {
+  color: var(--gray-800);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+}
+
+.subtitle-corporate {
+  color: var(--gray-600);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Estados de Status */
+.status-completed {
+  color: var(--success);
+}
+
+.status-in-progress {
+  color: var(--vivo-purple);
+}
+
+.status-delayed {
+  color: var(--error);
+}
+
+.status-not-started {
+  color: var(--gray-500);
+}
+
+/* Seções com fundo */
+.section-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--gray-300);
+  }
+}
+
+/* Badges Corporativos */
+.badge-vivo {
+  background: rgba(102, 0, 153, 0.1);
+  color: var(--vivo-purple);
+  border: 1px solid rgba(102, 0, 153, 0.2);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Progress bars profissionais */
+.progress-vivo {
+  background-color: var(--gray-200);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+
+  .progress-bar {
+    background: var(--vivo-purple-gradient);
+    transition: width 0.6s ease;
+  }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { TopicService, Topic, Document, Contact } from '../../core/services/topic.service';
+import { AuthService } from '../../core/services/auth.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 
 @Component({
@@ -18,14 +19,27 @@ export class TopicComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private topicService: TopicService
+    private topicService: TopicService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.topicId = +params['id'];
-      this.loadTopic();
+      this.loadUserTopics();
     });
+  }
+
+  loadUserTopics() {
+    // Carregar tópicos específicos do usuário logado
+    const currentUser = this.authService.currentUserValue;
+    const userId = currentUser?.email || 'default';
+
+    // Carregar tópicos individuais do usuário
+    this.topicService.loadUserTopics(userId);
+
+    // Depois carregar o tópico específico
+    this.loadTopic();
   }
 
   loadTopic() {
@@ -39,9 +53,12 @@ export class TopicComponent implements OnInit {
 
   markAsCompleted() {
     if (this.topic) {
-      this.topicService.markTopicAsCompleted(this.topic.id);
+      const currentUser = this.authService.currentUserValue;
+      const userId = currentUser?.email || 'default';
+
+      this.topicService.markTopicAsCompleted(this.topic.id, userId);
       this.topic.isCompleted = true;
-      console.log('Tópico marcado como concluído:', this.topic.title);
+      console.log('Tópico marcado como concluído:', this.topic.title, 'para usuário:', userId);
     }
   }
 

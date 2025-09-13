@@ -188,7 +188,11 @@ export class TopicService {
   public topics$ = this.topicsSubject.asObservable();
 
   constructor() {
-    this.loadTopicsFromStorage();
+    // Load topics without user ID initially
+    const storedTopics = this.loadTopicsFromStorage();
+    if (storedTopics.length > 0) {
+      this.topicsSubject.next(storedTopics);
+    }
   }
 
   getTopics(): Observable<Topic[]> {
@@ -205,7 +209,7 @@ export class TopicService {
     });
   }
 
-  markTopicAsCompleted(topicId: number): void {
+  markTopicAsCompleted(topicId: number, userId?: string): void {
     const currentTopics = this.topicsSubject.value;
     const updatedTopics = currentTopics.map(topic => {
       if (topic.id === topicId) {
@@ -215,10 +219,10 @@ export class TopicService {
     });
 
     this.topicsSubject.next(updatedTopics);
-    this.saveTopicsToStorage(updatedTopics);
+    this.saveTopicsToStorage(updatedTopics, userId);
   }
 
-  getCompletionStats(): { completed: number; total: number; percentage: number } {
+  getCompletionStats(userId?: string): { completed: number; total: number; percentage: number } {
     const topics = this.topicsSubject.value;
     const completed = topics.filter(t => t.isCompleted).length;
     const total = topics.length;
@@ -227,27 +231,55 @@ export class TopicService {
     return { completed, total, percentage };
   }
 
-  private loadTopicsFromStorage(): void {
+  getCompletionStatsForUser(userId: string): { completed: number; total: number; percentage: number } {
+    const userTopics = this.loadTopicsFromStorage(userId);
+    const completed = userTopics.filter(t => t.isCompleted).length;
+    const total = userTopics.length;
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    return { completed, total, percentage };
+  }
+
+  resetAllTopics(): void {
+    const currentTopics = this.topicsSubject.value;
+    const resetTopics = currentTopics.map(topic => ({
+      ...topic,
+      isCompleted: false
+    }));
+
+    this.topicsSubject.next(resetTopics);
+    this.saveTopicsToStorage(resetTopics);
+  }
+
+  private loadTopicsFromStorage(userId?: string): Topic[] {
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
-        const stored = localStorage.getItem('topics');
+        const key = userId ? `topics_${userId}` : 'topics';
+        const stored = localStorage.getItem(key);
         if (stored) {
-          const topics = JSON.parse(stored);
-          this.topicsSubject.next(topics);
+          return JSON.parse(stored);
         }
       } catch (error) {
         console.error('Error loading topics from storage:', error);
       }
     }
+    // Return default topics if no stored data
+    return this.topicsSubject.value;
   }
 
-  private saveTopicsToStorage(topics: Topic[]): void {
+  private saveTopicsToStorage(topics: Topic[], userId?: string): void {
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
-        localStorage.setItem('topics', JSON.stringify(topics));
+        const key = userId ? `topics_${userId}` : 'topics';
+        localStorage.setItem(key, JSON.stringify(topics));
       } catch (error) {
         console.error('Error saving topics to storage:', error);
       }
     }
+  }
+
+  loadUserTopics(userId: string): void {
+    const userTopics = this.loadTopicsFromStorage(userId);
+    this.topicsSubject.next(userTopics);
   }
 }

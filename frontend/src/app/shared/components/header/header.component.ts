@@ -9,34 +9,40 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <header class="bg-white shadow-lg">
-      <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center py-3 px-4">
-          <!-- Welcome Message na esquerda -->
-          <div class="d-flex align-items-center">
-            <div class="vivo-logo me-3">
-              <span class="text-white fw-bold">VIVO</span>
+    <header class="header">
+      <div class="header-container">
+        <!-- Brand Section -->
+        <div class="brand-section">
+          <div class="vivo-brand">
+            <div class="vivo-logo">
+              <span class="logo-text">VIVO</span>
             </div>
-            <div class="welcome-section">
-              <h1 class="h4 mb-0 text-dark fw-bold">{{ welcomeMessage }}</h1>
-              <p class="small text-muted mb-0">Sistema de Onboarding</p>
+            <div class="brand-info">
+              <h1 class="welcome-title">{{ welcomeMessage }}</h1>
+              <span class="system-subtitle">Sistema de Onboarding</span>
             </div>
           </div>
+        </div>
 
-          <!-- Navigation na direita -->
-          <nav class="d-flex align-items-center">
+        <!-- Navigation Section -->
+        <div class="nav-section">
+          <nav class="main-navigation">
             <a
               *ngFor="let item of navigationItems"
               [routerLink]="item.route"
-              class="nav-link text-muted fw-medium me-4"
-              routerLinkActive="text-purple active">
-              <i [class]="item.icon + ' me-1'"></i>{{ item.label }}
+              class="nav-item"
+              routerLinkActive="nav-item--active">
+              <i [class]="item.icon"></i>
+              <span>{{ item.label }}</span>
             </a>
-
-            <button class="btn btn-outline-purple" (click)="onLogout()">
-              <i class="fas fa-sign-out-alt me-1"></i>Sair
-            </button>
           </nav>
+
+          <div class="user-actions">
+            <button class="logout-btn" (click)="onLogout()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Sair</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>

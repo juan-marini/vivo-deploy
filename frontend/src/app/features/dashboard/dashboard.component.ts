@@ -30,10 +30,15 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData() {
+    // Subscribe to team members and update chart data automatically
     this.dashboardService.getTeamMembers().subscribe(members => {
       this.teamMembers = members;
+      // Update chart data whenever team members change
+      this.updateChartData();
     });
+  }
 
+  private updateChartData() {
     this.dashboardService.getChartData().subscribe(chartData => {
       this.chartData = chartData;
     });
@@ -96,28 +101,46 @@ export class DashboardComponent implements OnInit {
     this.selectedStartDate = ""
   }
 
-  updateMemberProgress(memberId: number, newProgress: number): void {
+  updateMemberProgress(memberId: string, newProgress: number): void {
     this.dashboardService.updateMemberProgress(memberId, newProgress);
   }
 
-  addNewMember(): void {
-    const newMember = {
-      name: "Novo Membro",
-      role: "Função",
-      startDate: new Date().toLocaleDateString('pt-BR'),
-      progress: 0,
-      status: "Não iniciado" as const
-    };
-    this.dashboardService.addTeamMember(newMember);
-  }
+  // Método removido - membros vêm do BD agora
 
   simulateProgressUpdate(): void {
-    // Simular atualização de progresso para demonstração
-    const randomMember = this.teamMembers[Math.floor(Math.random() * this.teamMembers.length)];
-    if (randomMember && randomMember.progress < 100) {
-      const newProgress = Math.min(100, randomMember.progress + Math.floor(Math.random() * 20) + 5);
-      this.updateMemberProgress(randomMember.id, newProgress);
+    // Refresh member progress from individual topic completion
+    this.dashboardService.refreshMemberProgress();
+
+    // Force update chart data immediately
+    setTimeout(() => {
+      this.updateChartData();
+    }, 100);
+  }
+
+  getPieChartStyle(): { [key: string]: string } {
+    if (!this.chartData || this.chartData.length === 0) {
+      return {};
     }
+
+    // Calculate cumulative percentages for the conic gradient
+    let cumulativePercentage = 0;
+    const gradientStops: string[] = [];
+
+    this.chartData.forEach((item, index) => {
+      const startPercentage = cumulativePercentage;
+      cumulativePercentage += item.value;
+      const endPercentage = cumulativePercentage;
+
+      // Convert percentage to degrees (360deg = 100%)
+      const startDegree = (startPercentage * 3.6);
+      const endDegree = (endPercentage * 3.6);
+
+      gradientStops.push(`${item.color} ${startDegree}deg ${endDegree}deg`);
+    });
+
+    return {
+      'background': `conic-gradient(${gradientStops.join(', ')})`
+    };
   }
 
 }
