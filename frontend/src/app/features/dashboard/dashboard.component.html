@@ -1,0 +1,199 @@
+<div class="min-vh-100 vivo-gradient">
+  <!-- Header -->
+  <header class="bg-white shadow-lg">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center py-3 px-4">
+        <div class="d-flex align-items-center">
+          <div class="vivo-logo me-3">
+            <span class="text-white fw-bold">VIVO</span>
+          </div>
+          <div>
+            <h1 class="h4 mb-0 text-dark fw-bold">Vivo Knowledge</h1>
+            <p class="small text-muted mb-0">Sistema de Onboarding</p>
+          </div>
+        </div>
+
+        <nav class="d-flex align-items-center">
+          <a routerLink="/home" class="nav-link text-muted fw-medium me-4">
+            <i class="fas fa-home me-1"></i>Home
+          </a>
+          <a routerLink="/progresso" class="nav-link text-muted fw-medium me-4">
+            <i class="fas fa-chart-line me-1"></i>Meu Progresso
+          </a>
+          <a routerLink="/dashboard" class="nav-link text-purple fw-medium me-4 active">
+            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+          </a>
+          <button class="btn btn-outline-purple" (click)="onLogout()">
+            <i class="fas fa-sign-out-alt me-1"></i>Sair
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container-fluid py-4">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="bg-white rounded-4 shadow-lg p-4 p-md-5">
+          <!-- Header -->
+          <div class="mb-5">
+            <h2 class="h3 fw-bold text-dark mb-4 d-flex align-items-center">
+              <i class="fas fa-tachometer-alt text-purple me-3"></i>
+              Dashboard do Gestor
+            </h2>
+
+            <!-- Stats Cards -->
+            <div class="row g-3 mb-4">
+              <div class="col-6 col-md-3">
+                <div class="stat-card p-3 rounded-3 text-center">
+                  <div class="stat-icon mb-2">
+                    <i class="fas fa-users text-purple"></i>
+                  </div>
+                  <h4 class="h5 fw-bold text-dark mb-1">{{ totalMembers }}</h4>
+                  <p class="small text-muted mb-0">Total de Membros</p>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="stat-card p-3 rounded-3 text-center">
+                  <div class="stat-icon mb-2">
+                    <i class="fas fa-check-circle text-success"></i>
+                  </div>
+                  <h4 class="h5 fw-bold text-dark mb-1">{{ completedMembers }}</h4>
+                  <p class="small text-muted mb-0">Concluídos</p>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="stat-card p-3 rounded-3 text-center">
+                  <div class="stat-icon mb-2">
+                    <i class="fas fa-clock text-warning"></i>
+                  </div>
+                  <h4 class="h5 fw-bold text-dark mb-1">{{ inProgressMembers }}</h4>
+                  <p class="small text-muted mb-0">Em Andamento</p>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="stat-card p-3 rounded-3 text-center">
+                  <div class="stat-icon mb-2">
+                    <i class="fas fa-exclamation-triangle text-danger"></i>
+                  </div>
+                  <h4 class="h5 fw-bold text-dark mb-1">{{ delayedMembers }}</h4>
+                  <p class="small text-muted mb-0">Atrasados</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <!-- Filters and Team List -->
+            <div class="col-12 col-lg-8">
+              <!-- Filters -->
+              <div class="filters-section mb-4">
+                <h4 class="h5 fw-bold text-dark mb-3">Filtros</h4>
+                <div class="row g-3">
+                  <div class="col-12 col-md-4">
+                    <select class="form-select" [(ngModel)]="selectedTeam">
+                      <option value="">Todas as Equipes</option>
+                      <option *ngFor="let team of teams" [value]="team">{{ team }}</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <select class="form-select" [(ngModel)]="selectedStatus">
+                      <option value="">Todos os Status</option>
+                      <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="d-flex gap-2">
+                      <input type="date" class="form-control" [(ngModel)]="selectedStartDate">
+                      <button class="btn btn-outline-secondary" (click)="clearFilters()" title="Limpar filtros">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Team Members List -->
+              <div class="team-list">
+                <h4 class="h5 fw-bold text-dark mb-3">Membros da Equipe</h4>
+                <div class="member-card p-3 rounded-3 mb-3" *ngFor="let member of filteredMembers">
+                  <div class="row align-items-center">
+                    <div class="col-12 col-md-4">
+                      <div class="d-flex align-items-center">
+                        <div class="member-avatar me-3">
+                          <i class="fas fa-user-circle text-purple"></i>
+                        </div>
+                        <div>
+                          <h6 class="fw-bold text-dark mb-1">{{ member.name }}</h6>
+                          <p class="small text-muted mb-0">{{ member.role }}</p>
+                          <p class="small text-muted mb-0">Início: {{ member.startDate }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-3 mt-2 mt-md-0">
+                      <span class="badge" [class]="getStatusClass(member.status)">
+                        {{ member.status }}
+                      </span>
+                    </div>
+                    <div class="col-12 col-md-5 mt-2 mt-md-0">
+                      <div class="d-flex align-items-center">
+                        <div class="progress flex-grow-1 me-3">
+                          <div 
+                            class="progress-bar" 
+                            [class]="getProgressBarClass(member.status)"
+                            role="progressbar" 
+                            [style.width.%]="member.progress"
+                            [attr.aria-valuenow]="member.progress" 
+                            aria-valuemin="0" 
+                            aria-valuemax="100">
+                          </div>
+                        </div>
+                        <span class="fw-bold text-dark small">{{ member.progress }}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- No Results -->
+                <div *ngIf="filteredMembers.length === 0" class="text-center py-4">
+                  <i class="fas fa-users text-muted mb-3" style="font-size: 2rem;"></i>
+                  <p class="text-muted">Nenhum membro encontrado com os filtros aplicados.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="col-12 col-lg-4">
+              <div class="chart-section">
+                <h4 class="h5 fw-bold text-dark mb-3">Distribuição de Status</h4>
+                <div class="chart-container">
+                  <!-- Simple Pie Chart Representation -->
+                  <div class="pie-chart mx-auto mb-4">
+                    <div class="pie-slice pie-slice-1"></div>
+                    <div class="pie-slice pie-slice-2"></div>
+                    <div class="pie-slice pie-slice-3"></div>
+                    <div class="pie-slice pie-slice-4"></div>
+                    <div class="pie-center">
+                      <span class="h6 fw-bold text-dark">{{ totalMembers }}</span>
+                      <small class="text-muted d-block">Total</small>
+                    </div>
+                  </div>
+
+                  <!-- Legend -->
+                  <div class="chart-legend">
+                    <div class="legend-item d-flex align-items-center mb-2" *ngFor="let item of chartData">
+                      <div class="legend-color me-2" [style.background-color]="item.color"></div>
+                      <span class="small text-dark">{{ item.label }}</span>
+                      <span class="small text-muted ms-auto">{{ item.value }}%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

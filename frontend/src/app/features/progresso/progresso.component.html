@@ -1,0 +1,181 @@
+<div class="min-vh-100 vivo-gradient">
+  <!-- Header -->
+  <header class="bg-white shadow-lg">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center py-3 px-4">
+        <div class="d-flex align-items-center">
+          <div class="vivo-logo me-3">
+            <span class="text-white fw-bold">VIVO</span>
+          </div>
+          <div>
+            <h1 class="h4 mb-0 text-dark fw-bold">Vivo Knowledge</h1>
+            <p class="small text-muted mb-0">Sistema de Onboarding</p>
+          </div>
+        </div>
+
+        <nav class="d-flex align-items-center">
+          <a routerLink="/home" class="nav-link text-muted fw-medium me-4">
+            <i class="fas fa-home me-1"></i>Home
+          </a>
+          <a routerLink="/progresso" class="nav-link text-purple fw-medium me-4 active">
+            <i class="fas fa-chart-line me-1"></i>Meu Progresso
+          </a>
+          <a routerLink="/dashboard" class="nav-link text-muted fw-medium me-4">
+            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+          </a>
+          <button class="btn btn-outline-purple" (click)="onLogout()">
+            <i class="fas fa-sign-out-alt me-1"></i>Sair
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container-fluid py-4">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="bg-white rounded-4 shadow-lg p-4 p-md-5">
+          <!-- Header -->
+          <div class="mb-5">
+            <h2 class="h3 fw-bold text-dark mb-4 d-flex align-items-center">
+              <i class="fas fa-chart-line text-purple me-3"></i>
+              Meu Progresso
+            </h2>
+
+            <!-- Progress Overview -->
+            <div class="progress-overview mb-4">
+              <div class="row g-4">
+                <div class="col-12 col-md-8">
+                  <div class="progress-card p-4 rounded-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h4 class="h5 fw-bold text-dark mb-0">Progresso Geral</h4>
+                      <span class="badge bg-purple fs-6">{{ progressPercentage }}%</span>
+                    </div>
+
+                    <div class="progress mb-3" style="height: 20px;">
+                      <div
+                        class="progress-bar progress-bar-purple"
+                        role="progressbar"
+                        [style.width.%]="progressPercentage"
+                        [attr.aria-valuenow]="progressPercentage"
+                        aria-valuemin="0"
+                        aria-valuemax="100">
+                      </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between text-muted small">
+                      <span>{{ completedItems }} de {{ totalItems }} tópicos concluídos</span>
+                      <span>Tempo estimado restante: {{ estimatedTimeRemaining }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                  <div class="stats-card p-4 rounded-3 h-100">
+                    <div class="text-center">
+                      <div class="stat-icon mb-3">
+                        <i class="fas fa-trophy text-warning" style="font-size: 2.5rem;"></i>
+                      </div>
+                      <h3 class="h4 fw-bold text-dark">{{ completedItems }}</h3>
+                      <p class="text-muted mb-2">Tópicos Concluídos</p>
+                      <small class="text-success">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Parabéns pelo progresso!
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <!-- Completed Items -->
+            <div class="col-12 col-lg-6">
+              <div class="section-card p-4 rounded-3">
+                <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Concluídos ({{ completedItems }})
+                </h4>
+
+                <div class="items-list">
+                  <div
+                    class="item-card p-3 rounded-2 mb-3"
+                    *ngFor="let item of completedItemsList">
+                    <div class="d-flex align-items-start">
+                      <div class="item-icon me-3 mt-1">
+                        <i class="fas fa-check-circle text-success"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="fw-bold text-dark mb-1">{{ item.title }}</h6>
+                        <p class="text-muted small mb-2">{{ item.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="badge bg-light text-dark">{{ item.category }}</span>
+                          <small class="text-success">
+                            <i class="fas fa-calendar me-1"></i>
+                            Concluído em {{ item.completedDate }}
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="completedItemsList.length === 0" class="text-center py-4">
+                  <i class="fas fa-clipboard-list text-muted mb-2" style="font-size: 2rem;"></i>
+                  <p class="text-muted">Nenhum tópico concluído ainda.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Items -->
+            <div class="col-12 col-lg-6">
+              <div class="section-card p-4 rounded-3">
+                <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
+                  <i class="fas fa-clock text-warning me-2"></i>
+                  Pendentes ({{ pendingItemsList.length }})
+                </h4>
+
+                <div class="items-list">
+                  <div
+                    class="item-card p-3 rounded-2 mb-3"
+                    *ngFor="let item of pendingItemsList">
+                    <div class="d-flex align-items-start">
+                      <div class="item-icon me-3 mt-1">
+                        <i class="fas fa-circle text-muted"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="fw-bold text-dark mb-1">{{ item.title }}</h6>
+                        <p class="text-muted small mb-2">{{ item.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <span class="badge bg-light text-dark">{{ item.category }}</span>
+                          <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>
+                            {{ item.estimatedTime }}
+                          </small>
+                        </div>
+                        <button
+                          class="btn btn-sm btn-purple w-100"
+                          [routerLink]="['/topic', item.id]">
+                          <i class="fas fa-play me-1"></i>
+                          Iniciar Estudo
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="pendingItemsList.length === 0" class="text-center py-4">
+                  <i class="fas fa-star text-success mb-2" style="font-size: 2rem;"></i>
+                  <h6 class="text-success">Parabéns!</h6>
+                  <p class="text-muted">Todos os tópicos foram concluídos!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

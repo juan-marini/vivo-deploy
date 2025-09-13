@@ -1,0 +1,248 @@
+<div class="min-vh-100 vivo-gradient">
+  <!-- Header -->
+  <header class="bg-white shadow-lg">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center py-3 px-4">
+        <div class="d-flex align-items-center">
+          <div class="vivo-logo me-3">
+            <span class="text-white fw-bold">VIVO</span>
+          </div>
+          <div>
+            <h1 class="h4 mb-0 text-dark fw-bold">Vivo Knowledge</h1>
+            <p class="small text-muted mb-0">Sistema de Onboarding</p>
+          </div>
+        </div>
+
+        <nav class="d-flex align-items-center">
+          <a routerLink="/home" class="nav-link text-muted fw-medium me-4">
+            <i class="fas fa-home me-1"></i>Home
+          </a>
+          <a routerLink="/progresso" class="nav-link text-muted fw-medium me-4">
+            <i class="fas fa-chart-line me-1"></i>Meu Progresso
+          </a>
+          <a routerLink="/dashboard" class="nav-link text-muted fw-medium me-4">
+            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+          </a>
+          <button class="btn btn-outline-purple" (click)="onLogout()">
+            <i class="fas fa-sign-out-alt me-1"></i>Sair
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container-fluid py-4" *ngIf="topic">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="bg-white rounded-4 shadow-lg p-4 p-md-5">
+          <!-- Back Button -->
+          <div class="mb-4">
+            <button class="btn btn-outline-secondary" (click)="goBack()">
+              <i class="fas fa-arrow-left me-2"></i>Voltar
+            </button>
+          </div>
+
+          <!-- Header -->
+          <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h2 class="h3 fw-bold text-dark mb-2 d-flex align-items-center">
+                  <i class="fas fa-file-alt text-purple me-3"></i>
+                  {{ topic.title }}
+                </h2>
+                <div class="d-flex gap-3 mb-3">
+                  <span class="badge bg-light text-dark">{{ topic.category }}</span>
+                  <span class="badge bg-info text-white">
+                    <i class="fas fa-clock me-1"></i>{{ topic.estimatedTime }}
+                  </span>
+                  <span
+                    *ngIf="topic.isCompleted"
+                    class="badge bg-success">
+                    <i class="fas fa-check me-1"></i>Concluído
+                  </span>
+                </div>
+              </div>
+
+              <button
+                *ngIf="!topic.isCompleted"
+                class="btn btn-success"
+                (click)="markAsCompleted()">
+                <i class="fas fa-check me-2"></i>Marcar como Concluído
+              </button>
+            </div>
+
+            <p class="text-muted fs-5">{{ topic.description }}</p>
+          </div>
+
+          <div class="row g-4">
+            <!-- Documents Section -->
+            <div class="col-12 col-lg-4">
+              <div class="section-card p-4 rounded-3 h-100">
+                <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
+                  <i class="fas fa-folder text-primary me-2"></i>
+                  Documentos ({{ topic.documents.length }})
+                </h4>
+
+                <div class="documents-list">
+                  <div
+                    class="document-item p-3 rounded-2 mb-3"
+                    *ngFor="let doc of topic.documents">
+                    <div class="d-flex align-items-center">
+                      <div class="doc-icon me-3">
+                        <i class="fas fa-file-pdf text-danger" *ngIf="doc.type === 'pdf'"></i>
+                        <i class="fas fa-file-word text-primary" *ngIf="doc.type === 'doc'"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="fw-bold text-dark mb-1">{{ doc.title }}</h6>
+                        <small class="text-muted" *ngIf="doc.size">{{ doc.size }}</small>
+                      </div>
+                      <button
+                        class="btn btn-sm btn-outline-primary"
+                        (click)="downloadDocument(doc)">
+                        <i class="fas fa-download"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="topic.documents.length === 0" class="text-center py-3">
+                  <i class="fas fa-folder-open text-muted mb-2"></i>
+                  <p class="text-muted small">Nenhum documento disponível</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Links Section -->
+            <div class="col-12 col-lg-4">
+              <div class="section-card p-4 rounded-3 h-100">
+                <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
+                  <i class="fas fa-link text-info me-2"></i>
+                  Links Úteis ({{ topic.links.length }})
+                </h4>
+
+                <div class="links-list">
+                  <div
+                    class="link-item p-3 rounded-2 mb-3"
+                    *ngFor="let link of topic.links">
+                    <div class="d-flex align-items-center">
+                      <div class="link-icon me-3">
+                        <i class="fas fa-external-link-alt text-info"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="fw-bold text-dark mb-0">{{ link.title }}</h6>
+                      </div>
+                      <button
+                        class="btn btn-sm btn-outline-info"
+                        (click)="openLink(link)">
+                        <i class="fas fa-external-link-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="topic.links.length === 0" class="text-center py-3">
+                  <i class="fas fa-link text-muted mb-2"></i>
+                  <p class="text-muted small">Nenhum link disponível</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contacts Section -->
+            <div class="col-12 col-lg-4">
+              <div class="section-card p-4 rounded-3 h-100">
+                <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
+                  <i class="fas fa-users text-success me-2"></i>
+                  Contatos de Referência ({{ topic.contacts.length }})
+                </h4>
+
+                <div class="contacts-list">
+                  <div
+                    class="contact-item p-3 rounded-2 mb-3"
+                    *ngFor="let contact of topic.contacts">
+                    <div class="d-flex align-items-start">
+                      <div class="contact-avatar me-3">
+                        <i class="fas fa-user-circle text-success" style="font-size: 2rem;"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="fw-bold text-dark mb-1">{{ contact.name }}</h6>
+                        <p class="text-muted small mb-1">{{ contact.role }}</p>
+                        <p class="text-muted small mb-1">{{ contact.department }}</p>
+                        <div class="contact-info">
+                          <small class="text-muted d-block">
+                            <i class="fas fa-envelope me-1"></i>{{ contact.email }}
+                          </small>
+                          <small class="text-muted d-block">
+                            <i class="fas fa-phone me-1"></i>{{ contact.phone }}
+                          </small>
+                        </div>
+                        <button
+                          class="btn btn-sm btn-outline-success mt-2"
+                          (click)="contactPerson(contact)">
+                          <i class="fas fa-envelope me-1"></i>Contatar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="topic.contacts.length === 0" class="text-center py-3">
+                  <i class="fas fa-user-friends text-muted mb-2"></i>
+                  <p class="text-muted small">Nenhum contato disponível</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Section -->
+          <div class="mt-5 text-center" *ngIf="!topic.isCompleted">
+            <div class="action-section p-4 rounded-3">
+              <h5 class="fw-bold text-dark mb-3">Pronto para concluir este tópico?</h5>
+              <p class="text-muted mb-4">
+                Após estudar todos os materiais e entrar em contato com as referências necessárias,
+                marque este tópico como concluído.
+              </p>
+              <button
+                class="btn btn-purple btn-lg"
+                (click)="markAsCompleted()">
+                <i class="fas fa-check me-2"></i>Marcar como Concluído
+              </button>
+            </div>
+          </div>
+
+          <!-- Completed Section -->
+          <div class="mt-5 text-center" *ngIf="topic.isCompleted">
+            <div class="completion-section p-4 rounded-3">
+              <i class="fas fa-trophy text-warning mb-3" style="font-size: 3rem;"></i>
+              <h5 class="fw-bold text-success mb-3">Tópico Concluído!</h5>
+              <p class="text-muted mb-4">
+                Parabéns! Você concluiu com sucesso o estudo de {{ topic.title }}.
+              </p>
+              <button
+                class="btn btn-outline-purple"
+                routerLink="/progresso">
+                <i class="fas fa-chart-line me-2"></i>Ver Meu Progresso
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Topic Not Found -->
+  <main class="container-fluid py-4" *ngIf="!topic">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6">
+        <div class="bg-white rounded-4 shadow-lg p-5 text-center">
+          <i class="fas fa-exclamation-triangle text-warning mb-3" style="font-size: 3rem;"></i>
+          <h3 class="fw-bold text-dark mb-3">Tópico não encontrado</h3>
+          <p class="text-muted mb-4">O tópico que você está procurando não existe ou foi removido.</p>
+          <button class="btn btn-purple" routerLink="/home">
+            <i class="fas fa-home me-2"></i>Voltar ao Início
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

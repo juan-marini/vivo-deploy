@@ -1,0 +1,119 @@
+.vivo-gradient {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #6D28D9 100%);
+}
+
+.vivo-logo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.text-purple {
+  color: #8B5CF6 !important;
+}
+
+.btn-purple {
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  border: none;
+  color: white;
+  font-weight: 500;
+  
+  &:hover {
+    background: linear-gradient(135deg, #7C3AED, #6D28D9);
+    color: white;
+  }
+}
+
+.btn-outline-purple {
+  border: 2px solid #8B5CF6;
+  color: #8B5CF6;
+  background: transparent;
+  font-weight: 500;
+  
+  &:hover {
+    background: #8B5CF6;
+    color: white;
+    border-color: #8B5CF6;
+  }
+}
+
+.overall-progress-card {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05));
+  border: 2px solid rgba(139, 92, 246, 0.2);
+}
+
+.progress-item-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+  }
+}
+
+.progress-lg {
+  height: 12px;
+}
+
+.progress-bar-purple {
+  background: linear-gradient(90deg, #8B5CF6, #7C3AED);
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  width: 24px;
+  text-align: center;
+}
+
+.circular-progress {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: conic-gradient(#8B5CF6 0deg, #8B5CF6 216deg, #e9ecef 216deg, #e9ecef 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 50%;
+  }
+}
+
+.circular-progress-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: #8B5CF6 !important;
+  }
+  
+  &.active {
+    color: #8B5CF6 !important;
+    font-weight: 600;
+  }
+}
+
+.rounded-4 {
+  border-radius: 1rem !important;
+}
