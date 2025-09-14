@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { RouterModule } from "@angular/router"
+import { Router, RouterModule } from "@angular/router"
 import { FormsModule } from "@angular/forms"
 import { DashboardService, TeamMember, ChartData } from '../../core/services/dashboard.service'
 import { HeaderComponent } from '../../shared/components/header/header.component'
@@ -23,7 +23,10 @@ export class DashboardComponent implements OnInit {
   teamMembers: TeamMember[] = []
   chartData: ChartData[] = []
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadDashboardData();
@@ -115,6 +118,23 @@ export class DashboardComponent implements OnInit {
     setTimeout(() => {
       this.updateChartData();
     }, 100);
+  }
+
+  openCollaboratorProgress(member: TeamMember): void {
+    this.router.navigate(['/collaborator', member.id]);
+  }
+
+  resetAllData(): void {
+    if (confirm('⚠️ ATENÇÃO: Isso irá resetar o progresso de TODOS os colaboradores e apagar todos os dados de estudo. Esta ação não pode ser desfeita. Deseja continuar?')) {
+      this.dashboardService.resetAllMembersData();
+
+      // Force update the dashboard
+      setTimeout(() => {
+        this.loadDashboardData();
+        this.updateChartData();
+        alert('✅ Todos os dados foram resetados com sucesso! Todos os colaboradores agora têm 0% de progresso.');
+      }, 100);
+    }
   }
 
   getPieChartStyle(): { [key: string]: string } {

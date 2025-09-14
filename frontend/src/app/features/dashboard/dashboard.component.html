@@ -62,8 +62,11 @@
               <div class="filters-section mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                   <h4 class="h5 fw-bold text-dark mb-0">Filtros</h4>
-                  <button class="btn-vivo-secondary btn-sm" (click)="simulateProgressUpdate()" title="Simular atualização de progresso">
-                    <i class="fas fa-sync-alt me-1"></i>Simular Progresso
+                  <button class="btn-vivo-secondary btn-sm me-2" (click)="simulateProgressUpdate()" title="Atualizar dados do progresso">
+                    <i class="fas fa-sync-alt me-1"></i>Atualizar Dados
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="resetAllData()" title="Resetar todos os estudos">
+                    <i class="fas fa-trash-alt me-1"></i>Reset Geral
                   </button>
                 </div>
                 <div class="row g-3">
@@ -93,7 +96,10 @@
               <!-- Team Members List -->
               <div class="team-list">
                 <h4 class="h5 fw-bold text-dark mb-3">Membros da Equipe</h4>
-                <div class="member-card p-3 rounded-3 mb-3" *ngFor="let member of filteredMembers">
+                <div class="member-card p-3 rounded-3 mb-3 clickable"
+                     *ngFor="let member of filteredMembers"
+                     (click)="openCollaboratorProgress(member)"
+                     title="Clique para ver desenvolvimento individual">
                   <div class="row align-items-center">
                     <div class="col-12 col-md-4">
                       <div class="d-flex align-items-center">

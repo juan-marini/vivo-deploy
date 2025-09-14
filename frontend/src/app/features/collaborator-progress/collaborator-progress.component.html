@@ -1,0 +1,254 @@
+<div class="min-vh-100 bg-light">
+  <app-header></app-header>
+
+  <main class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12" style="max-width: 1400px;">
+
+        <!-- Header com navegação -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <button class="btn btn-outline-primary" (click)="goBack()">
+            <i class="fas fa-arrow-left me-2"></i>Voltar ao Dashboard
+          </button>
+          <h1 class="h3 mb-0 text-primary">Acompanhamento Individual</h1>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary mb-3"></div>
+          <p class="text-muted">Carregando dados do colaborador...</p>
+        </div>
+
+        <!-- Main Content -->
+        <div *ngIf="!isLoading && collaboratorData" class="row g-4">
+
+          <!-- Left Column: Colaborador Info & Progress -->
+          <div class="col-lg-4">
+
+            <!-- Colaborador Card -->
+            <div class="card shadow-sm mb-4">
+              <div class="card-header bg-primary text-white">
+                <div class="text-center">
+                  <div class="collaborator-avatar mb-3">
+                    <i class="fas fa-user-circle"></i>
+                  </div>
+                  <h5 class="mb-1">{{ collaboratorData.member.name }}</h5>
+                  <p class="mb-2 opacity-75">{{ collaboratorData.member.role }}</p>
+                  <span class="badge badge-light" [class]="getStatusBadgeClass()">
+                    {{ collaboratorData.member.status }}
+                  </span>
+                </div>
+              </div>
+              <div class="card-body text-center">
+                <!-- Progress Circle -->
+                <div class="progress-circle-large mb-3">
+                  <div class="circle-progress"
+                       [style.--progress]="getOverallProgress() + '%'">
+                    <span class="progress-text">
+                      <strong>{{ getOverallProgress() }}%</strong>
+                      <small>Concluído</small>
+                    </span>
+                  </div>
+                </div>
+                <div class="row text-center g-3">
+                  <div class="col-4">
+                    <div class="stat-number text-success">{{ getCompletedTopics().length }}</div>
+                    <small class="text-muted">Concluídos</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="stat-number text-warning">{{ getCurrentTopics().length }}</div>
+                    <small class="text-muted">Estudando</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="stat-number text-info">{{ getTotalHoursSpent() }}</div>
+                    <small class="text-muted">Horas</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline de Marcos -->
+            <div class="card shadow-sm">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-route me-2"></i>Marcos de Desenvolvimento
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="milestone-timeline">
+                  <div class="milestone"
+                       *ngFor="let milestone of getProgressMilestones()"
+                       [class.completed]="milestone.isCompleted">
+                    <div class="milestone-marker">
+                      <i [class]="milestone.icon"></i>
+                    </div>
+                    <div class="milestone-content">
+                      <h6 class="milestone-title">{{ milestone.label }}</h6>
+                      <small class="text-muted">{{ milestone.description }}</small>
+                      <div class="progress-badge">{{ milestone.percentage }}%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Center Column: Progress Details -->
+          <div class="col-lg-5">
+
+            <!-- Progresso por Categoria -->
+            <div class="card shadow-sm mb-4">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-chart-bar me-2"></i>Progresso por Área de Conhecimento
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="category-progress-list">
+                  <div class="category-item" *ngFor="let category of getCategoryProgress()">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="category-name">{{ category.name }}</span>
+                      <span class="category-stats">{{ category.completed }}/{{ category.total }}</span>
+                    </div>
+                    <div class="progress progress-sm">
+                      <div class="progress-bar"
+                           [style.width.%]="category.percentage"
+                           [style.background-color]="getCategoryColor(category.name)">
+                      </div>
+                    </div>
+                    <small class="text-muted">{{ category.percentage }}% concluído</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tópicos Atuais -->
+            <div class="card shadow-sm mb-4">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-book-open me-2"></i>Estudando Atualmente
+                </h6>
+              </div>
+              <div class="card-body">
+                <div *ngIf="getCurrentTopics().length === 0" class="text-center py-3">
+                  <i class="fas fa-pause-circle fa-2x text-muted mb-2"></i>
+                  <p class="text-muted">Nenhum tópico em andamento</p>
+                </div>
+                <div *ngIf="getCurrentTopics().length > 0">
+                  <div class="current-topic-item" *ngFor="let topic of getCurrentTopics()">
+                    <div class="d-flex align-items-center">
+                      <div class="topic-icon me-3">
+                        <i class="fas fa-play-circle text-warning"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="mb-1">{{ topic.topicTitle }}</h6>
+                        <small class="text-muted">{{ topic.category }} • {{ topic.estimatedTime }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Atividade Recente -->
+            <div class="card shadow-sm">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-history me-2"></i>Atividades Recentes
+                </h6>
+              </div>
+              <div class="card-body">
+                <div *ngIf="collaboratorData.recentActivity.length === 0" class="text-center py-3">
+                  <i class="fas fa-clock fa-2x text-muted mb-2"></i>
+                  <p class="text-muted">Nenhuma atividade recente</p>
+                </div>
+                <div *ngIf="collaboratorData.recentActivity.length > 0">
+                  <div class="activity-item" *ngFor="let activity of collaboratorData.recentActivity.slice(0, 5)">
+                    <div class="d-flex align-items-start">
+                      <div class="activity-icon me-3">
+                        <i [class]="getActivityIcon(activity)"
+                           [class.text-success]="activity.type === 'completed'"
+                           [class.text-primary]="activity.type === 'started'">
+                        </i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <p class="mb-1"><strong>{{ activity.action }}</strong></p>
+                        <p class="text-primary mb-1">{{ activity.topicTitle }}</p>
+                        <small class="text-muted">{{ formatDate(activity.date) }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Insights & Recommendations -->
+          <div class="col-lg-3">
+
+            <!-- Insights de Performance -->
+            <div class="card shadow-sm mb-4">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-brain me-2"></i>Insights de Performance
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="insights-list">
+                  <div class="insight-item" *ngFor="let insight of getPerformanceInsights()">
+                    <div class="insight-header">
+                      <div class="insight-icon" [class]="'insight-' + insight.type">
+                        <i [class]="insight.icon"></i>
+                      </div>
+                      <h6 class="insight-title">{{ insight.title }}</h6>
+                    </div>
+                    <p class="insight-description">{{ insight.description }}</p>
+                    <div class="insight-action">
+                      <small class="text-muted">
+                        <i class="fas fa-lightbulb me-1"></i>{{ insight.action }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Próximas Recomendações -->
+            <div class="card shadow-sm">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-compass me-2"></i>Próximos Passos
+                </h6>
+              </div>
+              <div class="card-body">
+                <div *ngIf="areAllTopicsCompleted()" class="text-center py-3">
+                  <i class="fas fa-trophy fa-2x text-warning mb-2"></i>
+                  <p class="text-success"><strong>Parabéns!</strong></p>
+                  <p class="text-muted">Todos os tópicos foram concluídos</p>
+                </div>
+                <div *ngIf="!areAllTopicsCompleted()">
+                  <div class="recommendation-item" *ngFor="let rec of getNextRecommendations(); let i = index">
+                    <div class="rec-header">
+                      <span class="rec-priority" [class]="'priority-' + rec.priority">
+                        Prioridade {{ rec.priority }}
+                      </span>
+                      <span class="rec-number">{{ i + 1 }}</span>
+                    </div>
+                    <h6 class="rec-title">{{ rec.topicTitle }}</h6>
+                    <p class="rec-meta">{{ rec.category }} • {{ rec.estimatedTime }}</p>
+                    <small class="rec-reason">{{ rec.reason }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>

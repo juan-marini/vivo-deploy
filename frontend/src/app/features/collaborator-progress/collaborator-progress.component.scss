@@ -1,0 +1,431 @@
+// Colaborator Avatar
+.collaborator-avatar {
+  font-size: 3.5rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+// Progress Circle
+.progress-circle-large {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
+
+.circle-progress {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #007bff 0deg,
+    #007bff calc(var(--progress) * 3.6deg),
+    #e9ecef calc(var(--progress) * 3.6deg),
+    #e9ecef 360deg
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.progress-text {
+  width: 90px;
+  height: 90px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #212529;
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+}
+
+// Stats Numbers
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: block;
+}
+
+// Timeline Milestones
+.milestone-timeline {
+  position: relative;
+  padding-left: 3rem; // Increased left padding for better text spacing
+  padding-right: 1rem; // Add right padding for better spacing
+}
+
+.milestone {
+  position: relative;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.25rem; // Slightly more space between milestones
+  min-height: 3.5rem; // Minimum height for consistency
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: -2.75rem; // Adjusted to match new timeline positioning
+    top: 2.5rem;
+    width: 2px;
+    height: calc(100% - 1rem);
+    background: #dee2e6;
+  }
+
+  &.completed::after {
+    background: #28a745;
+  }
+}
+
+.milestone-marker {
+  position: absolute;
+  left: -3.25rem; // Adjusted to match new timeline positioning
+  top: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: #6c757d;
+
+  .completed & {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
+  }
+}
+
+.milestone-content {
+  position: relative;
+  padding-left: 0.5rem; // Add space from the timeline marker
+  padding-right: 4rem; // Add space for the progress badge
+}
+
+.milestone-title {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.25rem;
+
+  .completed & {
+    color: #28a745;
+  }
+}
+
+.progress-badge {
+  position: absolute;
+  right: 0.75rem; // Move away from the edge
+  top: 0.125rem; // Slight vertical offset for better alignment
+  background: #e9ecef;
+  color: #6c757d;
+  padding: 0.25rem 0.75rem; // Slightly larger padding
+  border-radius: 1.25rem; // More rounded
+  font-size: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); // Subtle shadow
+  border: 1px solid #dee2e6; // Subtle border
+
+  .completed & {
+    background: #d4edda;
+    color: #28a745;
+    border-color: #c3e6cb;
+  }
+}
+
+// Category Progress
+.category-progress-list {
+  .category-item {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.category-name {
+  font-weight: 600;
+  color: #495057;
+}
+
+.category-stats {
+  background: #f8f9fa;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.progress-sm {
+  height: 8px;
+  margin: 0.5rem 0;
+}
+
+// Current Topics
+.current-topic-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f8f9fa;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.topic-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #fff3cd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+// Activity Items
+.activity-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f8f9fa;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.activity-icon {
+  width: 2rem;
+  height: 2rem;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+// Insights
+.insights-list {
+  .insight-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: #f8f9fa;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.insight-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.insight-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  margin-right: 0.75rem;
+
+  &.insight-success {
+    background: #d4edda;
+    color: #28a745;
+  }
+
+  &.insight-info {
+    background: #d1ecf1;
+    color: #17a2b8;
+  }
+
+  &.insight-warning {
+    background: #fff3cd;
+    color: #ffc107;
+  }
+
+  &.insight-alert {
+    background: #f8d7da;
+    color: #dc3545;
+  }
+}
+
+.insight-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  color: #495057;
+}
+
+.insight-description {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.insight-action {
+  background: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border-left: 3px solid #17a2b8;
+}
+
+// Recommendations
+.recommendation-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: white;
+  border: 1px solid #e9ecef;
+  position: relative;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.rec-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.rec-priority {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  font-weight: 500;
+
+  &.priority-alta {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  &.priority-média {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  &.priority-baixa {
+    background: #d4edda;
+    color: #155724;
+  }
+}
+
+.rec-number {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.rec-title {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.25rem;
+  margin-right: 2rem; // Space for number badge
+}
+
+.rec-meta {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.rec-reason {
+  font-style: italic;
+  color: #6c757d;
+  display: block;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 0.25rem;
+  border-left: 3px solid #007bff;
+}
+
+// Custom badge styles
+.badge-light {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+// Card enhancements
+.card {
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+  }
+}
+
+.card-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+
+  &.bg-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3) !important;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .milestone-timeline {
+    padding-left: 1rem;
+    padding-right: 0.5rem; // Reduced padding for mobile
+  }
+
+  .milestone-marker {
+    left: -1.5rem;
+    width: 2rem; // Slightly smaller marker on mobile
+    height: 2rem;
+  }
+
+  .milestone-content {
+    padding-right: 3rem; // Less padding on mobile
+  }
+
+  .progress-badge {
+    right: 0.25rem; // Closer to edge on mobile
+    padding: 0.125rem 0.5rem; // Smaller padding
+    font-size: 0.6875rem; // Smaller font
+  }
+
+  .rec-title {
+    margin-right: 1rem;
+  }
+
+  .rec-number {
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+}

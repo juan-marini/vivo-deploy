@@ -6,7 +6,10 @@
       "Bash(ng serve:*)",
       "Bash(start reset-topics.html)",
       "Bash(del reset-topics.html)",
-      "Bash(start clear-all-data.html)"
+      "Bash(start clear-all-data.html)",
+      "Bash(dir \"C:\\Users\\usuario\\Desktop\\vivo-onboarding\\frontend\\src\\app\\features\\member-details\")",
+      "Bash(del \"C:\\Users\\usuario\\Desktop\\vivo-onboarding\\frontend\\src\\app\\features\\member-details\\member-details.component.ts\")",
+      "Bash(dir \"C:\\Users\\usuario\\Desktop\\vivo-onboarding\\frontend\\src\\app\\features\")"
     ],
     "deny": [],
     "ask": []

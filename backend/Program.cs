@@ -95,6 +95,7 @@ builder.Services.AddAuthentication(options =>
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IProgressService, ProgressService>();
 
 // CORS
 builder.Services.AddCors(options =>

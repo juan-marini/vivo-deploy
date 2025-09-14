@@ -73,11 +73,26 @@
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(139, 92, 246, 0.1);
   transition: all 0.3s ease;
-  
+
   &:hover {
     border-color: rgba(139, 92, 246, 0.3);
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+  }
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      border-color: rgba(139, 92, 246, 0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+    }
+
+    &:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+    }
   }
 }
 

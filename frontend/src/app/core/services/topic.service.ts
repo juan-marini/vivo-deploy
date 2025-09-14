@@ -282,4 +282,17 @@ export class TopicService {
     const userTopics = this.loadTopicsFromStorage(userId);
     this.topicsSubject.next(userTopics);
   }
+
+  getAllTopicsForUser(userId: string): import('./dashboard.service').MemberTopicProgress[] {
+    const userTopics = this.loadTopicsFromStorage(userId);
+    return userTopics.map(topic => ({
+      topicId: topic.id,
+      topicTitle: topic.title,
+      category: topic.category,
+      estimatedTime: topic.estimatedTime,
+      isCompleted: topic.isCompleted,
+      completedDate: topic.isCompleted ? new Date().toISOString().split('T')[0] : undefined,
+      timeSpent: topic.isCompleted ? topic.estimatedTime : undefined
+    }));
+  }
 }

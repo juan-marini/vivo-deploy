@@ -155,7 +155,10 @@ namespace backend.Utils
 
                 await context.SaveChangesAsync();
                 Console.WriteLine("✅ Usuários de teste criados");
-                
+
+                // Seed Topics
+                await SeedTopics(context);
+
                 // Listar usuários criados
                 Console.WriteLine("\n📋 Usuários disponíveis para login:");
                 Console.WriteLine("====================================");
@@ -175,6 +178,171 @@ namespace backend.Utils
                 {
                     Console.WriteLine($"   Detalhes: {ex.InnerException.Message}");
                 }
+            }
+        }
+
+        private static async Task SeedTopics(ApplicationDbContext context)
+        {
+            if (!await context.Topics.AnyAsync())
+            {
+                Console.WriteLine("📚 Criando tópicos padrão...");
+
+                var topics = new List<Topic>
+                {
+                    new Topic
+                    {
+                        Title = "SQL Server",
+                        Description = "Banco de dados principal utilizado para armazenar dados de clientes e transações. Aprenda sobre configuração, otimização e melhores práticas.",
+                        Category = "Banco de Dados",
+                        EstimatedTime = "2h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "Oracle",
+                        Description = "Banco de dados secundário utilizado para sistemas específicos e data warehouse.",
+                        Category = "Banco de Dados",
+                        EstimatedTime = "1.5h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "MongoDB",
+                        Description = "Banco de dados NoSQL para projetos específicos",
+                        Category = "Banco de Dados",
+                        EstimatedTime = "3h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "Angular",
+                        Description = "Framework frontend utilizado para desenvolvimento de SPAs",
+                        Category = "Frontend",
+                        EstimatedTime = "4h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "React",
+                        Description = "Biblioteca JavaScript para construção de interfaces de usuário",
+                        Category = "Frontend",
+                        EstimatedTime = "3.5h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "ASP.NET Core",
+                        Description = "Framework backend para desenvolvimento de APIs REST",
+                        Category = "Backend",
+                        EstimatedTime = "5h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "Docker",
+                        Description = "Containerização de aplicações para deployment",
+                        Category = "DevOps",
+                        EstimatedTime = "2.5h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "Kubernetes",
+                        Description = "Orquestração de containers em produção",
+                        Category = "DevOps",
+                        EstimatedTime = "6h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "Power BI",
+                        Description = "Ferramenta de Business Intelligence para análise de dados",
+                        Category = "Análise de Dados",
+                        EstimatedTime = "3h",
+                        IsActive = true
+                    },
+                    new Topic
+                    {
+                        Title = "Python para Dados",
+                        Description = "Linguagem Python aplicada à análise e ciência de dados",
+                        Category = "Análise de Dados",
+                        EstimatedTime = "4h",
+                        IsActive = true
+                    }
+                };
+
+                context.Topics.AddRange(topics);
+                await context.SaveChangesAsync();
+                Console.WriteLine($"✅ {topics.Count} tópicos criados com sucesso");
+
+                // Add some sample documents and links for the first few topics
+                await SeedTopicResources(context);
+            }
+            else
+            {
+                Console.WriteLine("ℹ️ Tópicos já existem no banco de dados");
+            }
+        }
+
+        private static async Task SeedTopicResources(ApplicationDbContext context)
+        {
+            var sqlServerTopic = await context.Topics.FirstOrDefaultAsync(t => t.Title == "SQL Server");
+            if (sqlServerTopic != null && !await context.TopicDocuments.AnyAsync(d => d.TopicId == sqlServerTopic.Id))
+            {
+                var documents = new List<TopicDocument>
+                {
+                    new TopicDocument
+                    {
+                        TopicId = sqlServerTopic.Id,
+                        Title = "Manual SQL Server.pdf",
+                        Type = "pdf",
+                        Url = "#",
+                        Size = "2.5 MB"
+                    },
+                    new TopicDocument
+                    {
+                        TopicId = sqlServerTopic.Id,
+                        Title = "Guia de Consultas.pdf",
+                        Type = "pdf",
+                        Url = "#",
+                        Size = "1.8 MB"
+                    }
+                };
+
+                var links = new List<TopicLink>
+                {
+                    new TopicLink
+                    {
+                        TopicId = sqlServerTopic.Id,
+                        Title = "Portal de Documentação Interna",
+                        Url = "https://docs.vivo.com/sql"
+                    },
+                    new TopicLink
+                    {
+                        TopicId = sqlServerTopic.Id,
+                        Title = "Tutorial SQL Server Microsoft",
+                        Url = "https://docs.microsoft.com/sql"
+                    }
+                };
+
+                var contacts = new List<TopicContact>
+                {
+                    new TopicContact
+                    {
+                        TopicId = sqlServerTopic.Id,
+                        Name = "Ana Silva",
+                        Role = "DBA Senior",
+                        Email = "ana.silva@vivo.com",
+                        Phone = "Ramal: 1234",
+                        Department = "Infraestrutura"
+                    }
+                };
+
+                context.TopicDocuments.AddRange(documents);
+                context.TopicLinks.AddRange(links);
+                context.TopicContacts.AddRange(contacts);
+                await context.SaveChangesAsync();
+                Console.WriteLine("✅ Recursos adicionais dos tópicos criados");
             }
         }
     }

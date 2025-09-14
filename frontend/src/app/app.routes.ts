@@ -23,6 +23,11 @@ export const routes: Routes = [
     canActivate: [authGuard, gestorGuard]
   },
   {
+    path: 'collaborator/:id',
+    loadComponent: () => import('./features/collaborator-progress/collaborator-progress.component').then(c => c.CollaboratorProgressComponent),
+    canActivate: [authGuard, gestorGuard]
+  },
+  {
     path: 'topic/:id',
     loadComponent: () => import('./features/topic/topic.component').then(c => c.TopicComponent),
     canActivate: [authGuard, colaboradorGuard]
