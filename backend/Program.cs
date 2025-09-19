@@ -12,10 +12,19 @@ using backend.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar Kestrel para usar HTTP em desenvolvimento
+// Configurar Kestrel para produção e desenvolvimento
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenLocalhost(5000); // HTTP
+    if (builder.Environment.IsDevelopment())
+    {
+        options.ListenLocalhost(5000); // HTTP para desenvolvimento
+    }
+    else
+    {
+        // Em produção, usar a porta do ambiente (Railway/Azure/etc)
+        var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+        options.ListenAnyIP(int.Parse(port));
+    }
 });
 
 // Add services

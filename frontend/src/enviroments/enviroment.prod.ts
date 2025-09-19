@@ -1,4 +1,4 @@
-export const environment_prod = {
+export const environment = {
   production: true,
-  apiUrl: 'https://api.vivoknowledge.com/api'
+  apiUrl: 'https://BACKEND_URL_PLACEHOLDER/api'
 };

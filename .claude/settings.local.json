@@ -44,7 +44,8 @@
       "Bash(start test-download.html)",
       "Bash(start test-direct-download.html)",
       "Bash(docker-compose:*)",
-      "Bash(docker exec:*)"
+      "Bash(docker exec:*)",
+      "Bash(del \"C:\\Users\\usuario\\Desktop\\vivo-onboardingg\\vivo-onboarding\\Dockerfile\")"
     ],
     "deny": [],
     "ask": []
