@@ -17,22 +17,19 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const currentRoute = state.url;
   const userRole = userProfileService.getUserRole();
 
-  // Regras de acesso por rota
-  const routePermissions = {
-    '/dashboard': ['Administrador', 'Gestor'],
-    '/home': ['Colaborador'],
-    '/progresso': ['Colaborador'],
-    '/topic': ['Colaborador']
-  };
-
-  // Verificar se a rota tem permissões definidas
-  const allowedRoles = routePermissions[currentRoute as keyof typeof routePermissions];
-
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
-    // Redirecionar para a rota padrão do usuário
-    const defaultRoute = userProfileService.getDefaultRoute();
-    router.navigate([defaultRoute]);
-    return false;
+  // Verificar permissões baseadas no tipo de usuário
+  if (currentRoute.startsWith('/dashboard') || currentRoute.startsWith('/collaborator')) {
+    if (!userProfileService.isGestor()) {
+      const defaultRoute = userProfileService.getDefaultRoute();
+      router.navigate([defaultRoute]);
+      return false;
+    }
+  } else if (currentRoute.startsWith('/home') || currentRoute.startsWith('/progresso') || currentRoute.startsWith('/topic')) {
+    if (!userProfileService.isColaborador()) {
+      const defaultRoute = userProfileService.getDefaultRoute();
+      router.navigate([defaultRoute]);
+      return false;
+    }
   }
 
   return true;

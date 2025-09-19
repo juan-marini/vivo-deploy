@@ -21,6 +21,7 @@ export class ProgressService {
   public progressItems$ = this.progressItemsSubject.asObservable();
 
   constructor(private topicService: TopicService) {
+    this.clearStoredProgress();
     this.syncWithTopics();
   }
 
@@ -159,6 +160,17 @@ export class ProgressService {
         localStorage.setItem('progressItems', JSON.stringify(items));
       } catch (error) {
         console.error('Error saving progress to storage:', error);
+      }
+    }
+  }
+
+  private clearStoredProgress(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        localStorage.removeItem('progressItems');
+        console.log('🧹 Dados de progresso do localStorage foram limpos');
+      } catch (error) {
+        console.error('Error clearing progress storage:', error);
       }
     }
   }

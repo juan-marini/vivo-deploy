@@ -1,0 +1,319 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R 4 0 R 5 0 R 6 0 R]
+/Count 4
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 7 0 R
+/Resources <<
+/Font <<
+/F1 8 0 R
+/F2 9 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 10 0 R
+/Resources <<
+/Font <<
+/F1 8 0 R
+/F2 9 0 R
+>>
+>>
+>>
+endobj
+
+5 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 11 0 R
+/Resources <<
+/Font <<
+/F1 8 0 R
+/F2 9 0 R
+>>
+>>
+>>
+endobj
+
+6 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 12 0 R
+/Resources <<
+/Font <<
+/F1 8 0 R
+/F2 9 0 R
+>>
+>>
+>>
+endobj
+
+7 0 obj
+<<
+/Length 850
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(.NET Core Documentation) Tj
+0 -40 Td
+/F2 16 Tf
+(Guia Completo para Desenvolvimento) Tj
+0 -80 Td
+/F1 18 Tf
+(1. Introducao ao .NET Core) Tj
+0 -30 Td
+/F2 12 Tf
+(O .NET Core e uma plataforma de desenvolvimento multiplataforma,) Tj
+0 -20 Td
+(open-source e de alto desempenho para criacao de aplicacoes modernas.) Tj
+0 -40 Td
+/F1 14 Tf
+(Principais Caracteristicas:) Tj
+0 -25 Td
+/F2 12 Tf
+(• Multiplataforma: Windows, Linux, macOS) Tj
+0 -20 Td
+(• Open Source: Codigo aberto no GitHub) Tj
+0 -20 Td
+(• Alto Desempenho: Otimizado para aplicacoes modernas) Tj
+0 -20 Td
+(• Modular: Arquitetura baseada em pacotes NuGet) Tj
+0 -40 Td
+/F1 14 Tf
+(Versoes Suportadas:) Tj
+0 -25 Td
+/F2 12 Tf
+(• .NET Core 3.1 (LTS)) Tj
+0 -20 Td
+(• .NET 5.0+) Tj
+0 -20 Td
+(• .NET 6.0 (LTS)) Tj
+0 -20 Td
+(• .NET 7.0+) Tj
+ET
+endstream
+endobj
+
+8 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica-Bold
+>>
+endobj
+
+9 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+10 0 obj
+<<
+/Length 780
+>>
+stream
+BT
+/F1 18 Tf
+50 750 Td
+(2. Instalacao e Configuracao) Tj
+0 -40 Td
+/F1 14 Tf
+(Instalando o .NET Core SDK:) Tj
+0 -30 Td
+/F2 12 Tf
+(1. Acesse: https://dotnet.microsoft.com/download) Tj
+0 -20 Td
+(2. Baixe o SDK para seu sistema operacional) Tj
+0 -20 Td
+(3. Execute o instalador) Tj
+0 -20 Td
+(4. Verifique a instalacao: dotnet --version) Tj
+0 -40 Td
+/F1 14 Tf
+(Comandos Essenciais do CLI:) Tj
+0 -30 Td
+/F2 12 Tf
+(• dotnet new console - Criar projeto console) Tj
+0 -20 Td
+(• dotnet new webapi - Criar Web API) Tj
+0 -20 Td
+(• dotnet build - Compilar projeto) Tj
+0 -20 Td
+(• dotnet run - Executar aplicacao) Tj
+0 -20 Td
+(• dotnet test - Executar testes) Tj
+0 -20 Td
+(• dotnet publish - Publicar aplicacao) Tj
+0 -40 Td
+/F1 14 Tf
+(Estrutura de Projeto:) Tj
+0 -30 Td
+/F2 12 Tf
+(• Program.cs - Ponto de entrada) Tj
+0 -20 Td
+(• .csproj - Arquivo de projeto) Tj
+0 -20 Td
+(• appsettings.json - Configuracoes) Tj
+ET
+endstream
+endobj
+
+11 0 obj
+<<
+/Length 750
+>>
+stream
+BT
+/F1 18 Tf
+50 750 Td
+(3. Conceitos Fundamentais) Tj
+0 -40 Td
+/F1 14 Tf
+(Dependency Injection (DI):) Tj
+0 -30 Td
+/F2 12 Tf
+(O .NET Core possui um container de DI integrado que permite) Tj
+0 -20 Td
+(injecao de dependencias nativa.) Tj
+0 -30 Td
+/F2 10 Tf
+(// Exemplo de registro de servico) Tj
+0 -15 Td
+(builder.Services.AddScoped<IUserService, UserService>\(\);) Tj
+0 -40 Td
+/F1 14 Tf
+(Configuration System:) Tj
+0 -30 Td
+/F2 12 Tf
+(Sistema flexivel de configuracao que suporta multiplas fontes:) Tj
+0 -20 Td
+(• appsettings.json) Tj
+0 -20 Td
+(• Environment Variables) Tj
+0 -20 Td
+(• Command Line Arguments) Tj
+0 -20 Td
+(• Azure Key Vault) Tj
+0 -40 Td
+/F1 14 Tf
+(Logging:) Tj
+0 -30 Td
+/F2 12 Tf
+(Sistema de logging integrado com suporte a multiplos providers:) Tj
+0 -20 Td
+(• Console, Debug, EventSource) Tj
+0 -20 Td
+(• Terceiros: Serilog, NLog) Tj
+ET
+endstream
+endobj
+
+12 0 obj
+<<
+/Length 650
+>>
+stream
+BT
+/F1 18 Tf
+50 750 Td
+(4. Desenvolvimento de APIs) Tj
+0 -40 Td
+/F1 14 Tf
+(Minimal APIs (.NET 6+):) Tj
+0 -30 Td
+/F2 10 Tf
+(var app = WebApplication.Create\(args\);) Tj
+0 -15 Td
+(app.MapGet\("/", \(\) => "Hello World!"\);) Tj
+0 -15 Td
+(app.Run\(\);) Tj
+0 -40 Td
+/F1 14 Tf
+(Controllers Tradicionais:) Tj
+0 -30 Td
+/F2 10 Tf
+([ApiController]) Tj
+0 -15 Td
+([Route\("api/[controller]"\)]) Tj
+0 -15 Td
+(public class UsersController : ControllerBase) Tj
+0 -15 Td
+({) Tj
+0 -15 Td
+(    [HttpGet]) Tj
+0 -15 Td
+(    public IActionResult Get\(\) => Ok\(users\);) Tj
+0 -15 Td
+(}) Tj
+0 -40 Td
+/F1 14 Tf
+(Middleware Pipeline:) Tj
+0 -30 Td
+/F2 12 Tf
+(• Request/Response processing) Tj
+0 -20 Td
+(• Authentication/Authorization) Tj
+0 -20 Td
+(• Exception Handling) Tj
+0 -20 Td
+(• Static Files) Tj
+0 -20 Td
+(• CORS) Tj
+ET
+endstream
+endobj
+
+xref
+0 13
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000130 00000 n
+0000000267 00000 n
+0000000404 00000 n
+0000000541 00000 n
+0000000678 00000 n
+0000001579 00000 n
+0000001640 00000 n
+0000001695 00000 n
+0000002526 00000 n
+0000003327 00000 n
+trailer
+<<
+/Size 13
+/Root 1 0 R
+>>
+startxref
+4028
+%%EOF

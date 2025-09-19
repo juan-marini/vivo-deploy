@@ -23,6 +23,13 @@ namespace backend.Models.DTOs
         public string StartDate { get; set; } = string.Empty;
         public int Progress { get; set; }
         public string Status { get; set; } = string.Empty;
+        public string? AvatarUrl { get; set; }
+        public string? Department { get; set; }
+        public string? Phone { get; set; }
+        public DateTime? AdmissionDate { get; set; }
+        public DateTime? LastLogin { get; set; }
+        public bool IsActive { get; set; }
+        public string Team { get; set; } = string.Empty; // Nome do perfil/equipe
     }
 
     public class MemberTopicProgressDto

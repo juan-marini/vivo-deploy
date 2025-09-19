@@ -1,8 +1,9 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule, type ActivatedRoute, Router } from "@angular/router"
-import { TopicService, Topic } from '../../core/services/topic.service'
+import { TopicService, Topic, Document } from '../../core/services/topic.service'
 import { AuthService } from '../../core/services/auth.service'
+import { FileDownloadService } from '../../core/services/file-download.service'
 
 @Component({
   selector: "app-topic-details",
@@ -19,7 +20,8 @@ export class TopicDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private topicService: TopicService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fileDownloadService: FileDownloadService
   ) {}
 
   ngOnInit(): void {
@@ -30,10 +32,21 @@ export class TopicDetailsComponent implements OnInit {
   }
 
   loadTopic(): void {
+    console.log('🔍 Carregando tópico ID:', this.topicId);
     this.topicService.getTopicById(this.topicId).subscribe(topic => {
+      console.log('📄 Tópico recebido:', topic);
       this.topic = topic
       if (!this.topic) {
+        console.log('❌ Tópico não encontrado, redirecionando...');
         this.router.navigate(['/home'])
+      } else {
+        console.log('✅ Tópico carregado:', {
+          id: topic.id,
+          title: topic.title,
+          documents: topic.documents?.length || 0,
+          links: topic.links?.length || 0,
+          contacts: topic.contacts?.length || 0
+        });
       }
     })
   }
@@ -48,5 +61,26 @@ export class TopicDetailsComponent implements OnInit {
 
   onLogout(): void {
     this.authService.logout()
+  }
+
+  downloadDocument(doc: Document): void {
+    console.log('🔽 Download iniciado:', doc.title);
+    console.log('📄 Documento:', doc);
+
+    // Mapear títulos para nomes de arquivos reais
+    let fileName = '';
+
+    if (doc.title.includes('.NET Core') || doc.title.includes('Guia .NET Core')) {
+      fileName = 'dotnet-core-documentation.pdf';
+    } else if (doc.title.includes('ASP.NET')) {
+      fileName = 'aspnet-core-tutorial.pdf';
+    } else {
+      fileName = 'exemplo-documento.pdf';
+    }
+
+    console.log('📎 Arquivo a ser baixado:', fileName);
+
+    // Usar o serviço que força download real
+    this.fileDownloadService.downloadFileDirectly(fileName);
   }
 }

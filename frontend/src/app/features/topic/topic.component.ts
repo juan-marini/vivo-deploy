@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { TopicService, Topic, Document, Contact } from '../../core/services/topic.service';
 import { AuthService } from '../../core/services/auth.service';
+import { FileDownloadService } from '../../core/services/file-download.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 
 @Component({
@@ -20,7 +21,8 @@ export class TopicComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private topicService: TopicService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fileDownloadService: FileDownloadService
   ) {}
 
   ngOnInit() {
@@ -63,8 +65,24 @@ export class TopicComponent implements OnInit {
   }
 
   downloadDocument(doc: Document) {
-    console.log('Baixando documento:', doc.title);
-    // Em um app real, faria o download do documento
+    console.log('🔽 Download iniciado:', doc.title);
+    console.log('📄 Documento:', doc);
+
+    // Mapear títulos para nomes de arquivos reais
+    let fileName = '';
+
+    if (doc.title.includes('.NET Core') || doc.title.includes('Guia .NET Core')) {
+      fileName = 'dotnet-core-documentation.pdf';
+    } else if (doc.title.includes('ASP.NET')) {
+      fileName = 'aspnet-core-tutorial.pdf';
+    } else {
+      fileName = 'exemplo-documento.pdf';
+    }
+
+    console.log('📎 Arquivo a ser baixado:', fileName);
+
+    // Usar o serviço que força download real
+    this.fileDownloadService.downloadFileDirectly(fileName);
   }
 
   openLink(link: Document) {

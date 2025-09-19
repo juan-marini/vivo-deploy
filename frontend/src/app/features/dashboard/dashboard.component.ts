@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { Router, RouterModule } from "@angular/router"
 import { FormsModule } from "@angular/forms"
-import { DashboardService, TeamMember, ChartData } from '../../core/services/dashboard.service'
+import { DashboardService, ChartData } from '../../core/services/dashboard.service'
+import { TeamMember } from '../../core/services/team.service'
 import { HeaderComponent } from '../../shared/components/header/header.component'
 
 @Component({
@@ -30,6 +31,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadDashboardData();
+    // Atualizar dados automaticamente a cada 10 segundos para melhor responsividade
+    setInterval(() => {
+      this.refreshDashboardDataSilent();
+    }, 10000);
   }
 
   loadDashboardData() {
@@ -41,6 +46,45 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private refreshDashboardDataSilent() {
+    // Força refresh dos dados do backend
+    this.dashboardService.refreshMemberProgress();
+
+    // Recarrega os dados após um pequeno delay
+    setTimeout(() => {
+      this.loadDashboardData();
+    }, 1000);
+  }
+
+  manualRefresh() {
+    console.log('🔄 Atualizando dados do dashboard manualmente...');
+
+    // Show loading state (optional visual feedback)
+    this.showRefreshFeedback();
+
+    // Force refresh from backend with cache clearing
+    this.dashboardService.refreshMemberProgress();
+
+    // Force reload all data with delay to ensure backend response
+    setTimeout(() => {
+      this.loadDashboardData();
+      this.updateChartData();
+    }, 500);
+  }
+
+  private showRefreshFeedback() {
+    // Simple visual feedback for user
+    const refreshButtons = document.querySelectorAll('[data-refresh-btn]');
+    refreshButtons.forEach(btn => {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Atualizando...';
+
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+      }, 2000);
+    });
+  }
+
   private updateChartData() {
     this.dashboardService.getChartData().subscribe(chartData => {
       this.chartData = chartData;
@@ -49,7 +93,7 @@ export class DashboardComponent implements OnInit {
 
   get filteredMembers(): TeamMember[] {
     return this.teamMembers.filter((member) => {
-      const matchesTeam = !this.selectedTeam || member.role.toLowerCase().includes(this.selectedTeam.toLowerCase())
+      const matchesTeam = !this.selectedTeam || (member.team && member.team.toLowerCase().includes(this.selectedTeam.toLowerCase()))
       const matchesStatus = !this.selectedStatus || member.status === this.selectedStatus
       const matchesDate = !this.selectedStartDate || member.startDate.includes(this.selectedStartDate)
       return matchesTeam && matchesStatus && matchesDate
@@ -105,19 +149,32 @@ export class DashboardComponent implements OnInit {
   }
 
   updateMemberProgress(memberId: string, newProgress: number): void {
-    this.dashboardService.updateMemberProgress(memberId, newProgress);
+    // Método removido - progresso agora vem do backend via tópicos completados
+    console.log('Progresso atualizado via backend para:', memberId, newProgress);
+    this.dashboardService.refreshMemberProgress();
   }
 
   // Método removido - membros vêm do BD agora
 
   simulateProgressUpdate(): void {
-    // Refresh member progress from individual topic completion
+    console.log('🔄 Atualizando progresso dos membros...');
+
+    // Show loading state
+    this.showRefreshFeedback();
+
+    // Refresh member progress from individual topic completion with force
     this.dashboardService.refreshMemberProgress();
 
-    // Force update chart data immediately
+    // Force update chart data and reload all data
     setTimeout(() => {
+      this.loadDashboardData();
       this.updateChartData();
-    }, 100);
+    }, 500);
+
+    // Show success message
+    setTimeout(() => {
+      console.log('✅ Dados atualizados com sucesso!');
+    }, 1500);
   }
 
   openCollaboratorProgress(member: TeamMember): void {

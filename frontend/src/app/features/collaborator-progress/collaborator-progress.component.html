@@ -7,9 +7,14 @@
 
         <!-- Header com navegação -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <button class="btn btn-outline-primary" (click)="goBack()">
-            <i class="fas fa-arrow-left me-2"></i>Voltar ao Dashboard
-          </button>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" (click)="goBack()">
+              <i class="fas fa-arrow-left me-2"></i>Voltar ao Dashboard
+            </button>
+            <button class="btn btn-outline-success" (click)="manualRefresh()" [disabled]="isLoading">
+              <i class="fas fa-sync-alt me-2" [class.fa-spin]="isLoading"></i>Atualizar Dados
+            </button>
+          </div>
           <h1 class="h3 mb-0 text-primary">Acompanhamento Individual</h1>
         </div>
 

@@ -36,7 +36,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/dashboard']);
+      const defaultRoute = this.userProfileService.getDefaultRoute();
+      this.router.navigate([defaultRoute]);
     }
 
     const savedEmail = this.storage.getItem('rememberedEmail', 'local');

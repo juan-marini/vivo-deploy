@@ -20,5 +20,11 @@ namespace backend.Models.DTOs
         public bool PrimeiroAcesso { get; set; }
         public string? Departamento { get; set; }
         public string? Cargo { get; set; }
+        public int PerfilId { get; set; }
+        public bool Ativo { get; set; }
+        public DateTime? DataAdmissao { get; set; }
+        public string? Telefone { get; set; }
+        public int? GestorId { get; set; }
+        public DateTime? UltimoLogin { get; set; }
     }
 }

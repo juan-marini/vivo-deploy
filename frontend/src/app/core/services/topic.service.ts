@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../enviroments/enviroment';
+import { AuthService } from './auth.service';
 
 export interface Document {
   id: number;
@@ -35,164 +38,16 @@ export interface Topic {
 })
 export class TopicService {
   private topicsSubject = new BehaviorSubject<Topic[]>([
-    {
-      id: 1,
-      title: 'SQL Server',
-      description: 'Banco de dados principal utilizado para armazenar dados de clientes e transações. Aprenda sobre configuração, otimização e melhores práticas.',
-      category: 'Banco de Dados',
-      estimatedTime: '2h',
-      isCompleted: false,
-      documents: [
-        { id: 1, title: 'Manual SQL Server.pdf', type: 'pdf', url: '#', size: '2.5 MB' },
-        { id: 2, title: 'Guia de Consultas.pdf', type: 'pdf', url: '#', size: '1.8 MB' },
-        { id: 3, title: 'Configuração de Índices.doc', type: 'doc', url: '#', size: '850 KB' }
-      ],
-      links: [
-        { id: 1, title: 'Portal de Documentação Interna', type: 'link', url: 'https://docs.vivo.com/sql' },
-        { id: 2, title: 'Tutorial SQL Server Microsoft', type: 'link', url: 'https://docs.microsoft.com/sql' }
-      ],
-      contacts: [
-        {
-          id: 1,
-          name: 'Ana Silva',
-          role: 'DBA Senior',
-          email: 'ana.silva@vivo.com',
-          phone: 'Ramal: 1234',
-          department: 'Infraestrutura'
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Oracle',
-      description: 'Banco de dados secundário utilizado para sistemas específicos e data warehouse.',
-      category: 'Banco de Dados',
-      estimatedTime: '1.5h',
-      isCompleted: false,
-      documents: [
-        { id: 1, title: 'Oracle Setup Guide.pdf', type: 'pdf', url: '#', size: '3.2 MB' },
-        { id: 2, title: 'Query Optimization.pdf', type: 'pdf', url: '#', size: '2.1 MB' }
-      ],
-      links: [
-        { id: 1, title: 'Oracle Documentation', type: 'link', url: 'https://docs.oracle.com' }
-      ],
-      contacts: [
-        {
-          id: 1,
-          name: 'Carlos Santos',
-          role: 'DBA Oracle',
-          email: 'carlos.santos@vivo.com',
-          phone: 'Ramal: 1567',
-          department: 'Infraestrutura'
-        }
-      ]
-    },
-    {
-      id: 3,
-      title: 'MongoDB',
-      description: 'Banco de dados NoSQL para projetos específicos',
-      category: 'Banco de Dados',
-      estimatedTime: '3h',
-      isCompleted: false,
-      documents: [
-        { id: 1, title: 'MongoDB Guide.pdf', type: 'pdf', url: '#', size: '2.8 MB' }
-      ],
-      links: [
-        { id: 1, title: 'MongoDB Documentation', type: 'link', url: 'https://docs.mongodb.com' }
-      ],
-      contacts: [
-        {
-          id: 1,
-          name: 'Lucas Pereira',
-          role: 'NoSQL Specialist',
-          email: 'lucas.pereira@vivo.com',
-          phone: 'Ramal: 1890',
-          department: 'Desenvolvimento'
-        }
-      ]
-    },
-    {
-      id: 4,
-      title: 'Ferramentas de Desenvolvimento',
-      description: 'IDEs, frameworks e bibliotecas utilizadas',
-      category: 'Desenvolvimento',
-      estimatedTime: '4h',
-      isCompleted: false,
-      documents: [
-        { id: 1, title: 'Guia de Setup.pdf', type: 'pdf', url: '#', size: '1.5 MB' }
-      ],
-      links: [
-        { id: 1, title: 'Documentação Interna', type: 'link', url: 'https://dev.vivo.com' }
-      ],
-      contacts: [
-        {
-          id: 1,
-          name: 'Mariana Costa',
-          role: 'Tech Lead',
-          email: 'mariana.costa@vivo.com',
-          phone: 'Ramal: 2001',
-          department: 'Desenvolvimento'
-        }
-      ]
-    },
-    {
-      id: 5,
-      title: 'Políticas de RH',
-      description: 'Diretrizes e procedimentos de recursos humanos',
-      category: 'RH',
-      estimatedTime: '1h',
-      isCompleted: false,
-      documents: [
-        { id: 1, title: 'Manual do Funcionário.pdf', type: 'pdf', url: '#', size: '3.1 MB' }
-      ],
-      links: [
-        { id: 1, title: 'Portal RH', type: 'link', url: 'https://rh.vivo.com' }
-      ],
-      contacts: [
-        {
-          id: 1,
-          name: 'Patricia Oliveira',
-          role: 'Analista de RH',
-          email: 'patricia.oliveira@vivo.com',
-          phone: 'Ramal: 3000',
-          department: 'Recursos Humanos'
-        }
-      ]
-    },
-    {
-      id: 6,
-      title: 'Infraestrutura AWS',
-      description: 'Serviços e configurações da Amazon Web Services',
-      category: 'Infraestrutura',
-      estimatedTime: '5h',
-      isCompleted: false,
-      documents: [
-        { id: 1, title: 'AWS Setup Guide.pdf', type: 'pdf', url: '#', size: '4.2 MB' }
-      ],
-      links: [
-        { id: 1, title: 'AWS Console', type: 'link', url: 'https://aws.amazon.com' }
-      ],
-      contacts: [
-        {
-          id: 1,
-          name: 'Roberto Silva',
-          role: 'Cloud Architect',
-          email: 'roberto.silva@vivo.com',
-          phone: 'Ramal: 4000',
-          department: 'Infraestrutura'
-        }
-      ]
-    }
+    // DADOS MOCADOS REMOVIDOS - AGORA CARREGA DA API
   ]);
 
   public topics$ = this.topicsSubject.asObservable();
 
-  constructor() {
-    // Load topics without user ID initially
-    const storedTopics = this.loadTopicsFromStorage();
-    if (storedTopics.length > 0) {
-      this.topicsSubject.next(storedTopics);
-    }
+  constructor(private http: HttpClient, private authService: AuthService) {
+    // CLEAR ALL MOCKED DATA FROM LOCALSTORAGE
+    this.clearAllStoredData();
+    // LOAD TOPICS FROM API
+    this.loadTopicsFromApi();
   }
 
   getTopics(): Observable<Topic[]> {
@@ -210,6 +65,15 @@ export class TopicService {
   }
 
   markTopicAsCompleted(topicId: number, userId?: string): void {
+    const currentUser = this.authService.currentUserValue;
+    const memberId = userId || currentUser?.email;
+
+    if (!memberId) {
+      console.error('❌ Usuário não encontrado para salvar progresso');
+      return;
+    }
+
+    // Atualiza o estado local primeiro
     const currentTopics = this.topicsSubject.value;
     const updatedTopics = currentTopics.map(topic => {
       if (topic.id === topicId) {
@@ -220,6 +84,26 @@ export class TopicService {
 
     this.topicsSubject.next(updatedTopics);
     this.saveTopicsToStorage(updatedTopics, userId);
+
+    // Envia para a API
+    const apiUrl = `${environment.apiUrl}/progress/member/${memberId}/topic/${topicId}/complete`;
+    this.http.post(apiUrl, {}).subscribe({
+      next: (response) => {
+        console.log('✅ Progresso salvo no banco de dados:', response);
+      },
+      error: (error) => {
+        console.error('❌ Erro ao salvar progresso no banco:', error);
+        // Reverte o estado local em caso de erro
+        const revertedTopics = currentTopics.map(topic => {
+          if (topic.id === topicId) {
+            return { ...topic, isCompleted: false };
+          }
+          return topic;
+        });
+        this.topicsSubject.next(revertedTopics);
+        this.saveTopicsToStorage(revertedTopics, userId);
+      }
+    });
   }
 
   getCompletionStats(userId?: string): { completed: number; total: number; percentage: number } {
@@ -294,5 +178,143 @@ export class TopicService {
       completedDate: topic.isCompleted ? new Date().toISOString().split('T')[0] : undefined,
       timeSpent: topic.isCompleted ? topic.estimatedTime : undefined
     }));
+  }
+
+  getTopicsByCategory(category: string): Observable<Topic[]> {
+    return new Observable(observer => {
+      const subscription = this.topics$.subscribe(topics => {
+        const filteredTopics = topics.filter(topic =>
+          topic.category.toLowerCase() === category.toLowerCase()
+        );
+        observer.next(filteredTopics);
+      });
+      return () => subscription.unsubscribe();
+    });
+  }
+
+  getAvailableCategories(): Observable<string[]> {
+    return new Observable(observer => {
+      const subscription = this.topics$.subscribe(topics => {
+        const categories = [...new Set(topics.map(topic => topic.category))];
+        observer.next(categories.sort());
+      });
+      return () => subscription.unsubscribe();
+    });
+  }
+
+  searchTopics(searchTerm: string, category?: string): Observable<Topic[]> {
+    return new Observable(observer => {
+      const subscription = this.topics$.subscribe(topics => {
+        let filteredTopics = topics;
+
+        // Filter by category if specified
+        if (category && category !== 'all') {
+          filteredTopics = filteredTopics.filter(topic =>
+            topic.category.toLowerCase() === category.toLowerCase()
+          );
+        }
+
+        // Filter by search term
+        if (searchTerm && searchTerm.trim() !== '') {
+          const term = searchTerm.toLowerCase();
+          filteredTopics = filteredTopics.filter(topic =>
+            topic.title.toLowerCase().includes(term) ||
+            topic.description.toLowerCase().includes(term) ||
+            topic.category.toLowerCase().includes(term)
+          );
+        }
+
+        observer.next(filteredTopics);
+      });
+      return () => subscription.unsubscribe();
+    });
+  }
+
+  private loadTopicsFromApi(): void {
+    const currentUser = this.authService.currentUserValue;
+
+    if (!currentUser?.email) {
+      console.log('⏳ Aguardando usuário estar logado para carregar tópicos...');
+      // Se não tem usuário, tenta novamente em 1 segundo
+      setTimeout(() => this.loadTopicsFromApi(), 1000);
+      return;
+    }
+
+    // Carrega os tópicos completos com documentos, links e contatos
+    const topicsUrl = `${environment.apiUrl}/progress/topics`;
+    const memberProgressUrl = `${environment.apiUrl}/progress/member/${currentUser.email}`;
+
+    // Primeiro carrega os tópicos completos
+    this.http.get<any[]>(topicsUrl).subscribe({
+      next: (topicsData) => {
+        // Depois carrega o progresso do usuário
+        this.http.get<any>(memberProgressUrl).subscribe({
+          next: (memberData) => {
+            const progressMap = new Map();
+            if (memberData && memberData.topicsProgress) {
+              memberData.topicsProgress.forEach((progress: any) => {
+                progressMap.set(progress.topicId, progress.isCompleted);
+              });
+            }
+
+            const topics: Topic[] = topicsData.map(topic => ({
+              id: topic.id,
+              title: topic.title,
+              description: topic.description,
+              category: topic.category,
+              estimatedTime: topic.estimatedTime,
+              isCompleted: progressMap.get(topic.id) || false,
+              documents: topic.documents || [],
+              links: topic.links || [],
+              contacts: topic.contacts || []
+            }));
+
+            console.log('🔍 Dados completos carregados:', topics);
+            console.log('📄 Exemplo de tópico 3:', topics.find(t => t.id === 3));
+
+            this.topicsSubject.next(topics);
+            console.log(`✅ ${topics.length} tópicos carregados com documentos, links e contatos`);
+          },
+          error: (progressError) => {
+            console.log('⚠️ Erro ao carregar progresso, usando tópicos sem progresso:', progressError);
+            // Se não conseguir carregar progresso, usa tópicos sem progresso
+            const topics: Topic[] = topicsData.map(topic => ({
+              id: topic.id,
+              title: topic.title,
+              description: topic.description,
+              category: topic.category,
+              estimatedTime: topic.estimatedTime,
+              isCompleted: false,
+              documents: topic.documents || [],
+              links: topic.links || [],
+              contacts: topic.contacts || []
+            }));
+            this.topicsSubject.next(topics);
+            console.log(`✅ ${topics.length} tópicos carregados sem progresso específico`);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('❌ Erro ao carregar tópicos da API:', error);
+        this.topicsSubject.next([]);
+      }
+    });
+  }
+
+  private clearAllStoredData(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        // Clear all topic-related data from localStorage
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.startsWith('topics') || key.includes('progress') || key.includes('topic')) {
+            localStorage.removeItem(key);
+          }
+        });
+        console.log('🧹 Dados mocados do localStorage foram limpos');
+      } catch (error) {
+        console.error('Error clearing stored data:', error);
+      }
+    }
   }
 }

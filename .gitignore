@@ -1,0 +1,108 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+**/dist/
+**/build/
+**/out/
+**/bin/
+**/obj/
+
+# Development files
+.vscode/
+.vs/
+.idea/
+*.user
+*.suo
+*.cache
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Test and debug files
+test-*.html
+test-*.sql
+test-*.pdf
+debug-*.html
+fix-*.html
+fix-*.sql
+reset-*.html
+reset-*.sql
+execute-*.html
+execute-*.sql
+run-*.html
+cleanup-*.sql
+populate-*.html
+create-*.sql
+add-*.html
+add-*.sql
+analyze-*.sql
+final-*.sql
+update-*.sql
+*.ps1
+
+# Images and media (except assets)
+/*.jpg
+/*.jpeg
+/*.png
+/*.gif
+/*.bmp
+/*.svg
+/*.pdf
+
+# Docker volumes
+mysql_data/
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# Package files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Misc
+NUL
+*.cs.bak
+*.bak

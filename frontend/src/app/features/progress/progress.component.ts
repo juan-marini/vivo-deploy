@@ -17,33 +17,10 @@ interface ProgressItem {
   styleUrls: ["./progress.component.scss"],
 })
 export class ProgressComponent {
-  overallProgress = 60
+  overallProgress = 0
 
   progressItems: ProgressItem[] = [
-    {
-      id: 1,
-      title: "SQL Server",
-      completed: true,
-      progress: 100,
-    },
-    {
-      id: 2,
-      title: "Oracle",
-      completed: true,
-      progress: 100,
-    },
-    {
-      id: 3,
-      title: "MongoDB",
-      completed: false,
-      progress: 0,
-    },
-    {
-      id: 4,
-      title: "Ferramentas de Desenvolvimento",
-      completed: false,
-      progress: 45,
-    },
+    // DADOS MOCADOS REMOVIDOS - AGORA CARREGA DA API
   ]
 
   get completedItems(): number {

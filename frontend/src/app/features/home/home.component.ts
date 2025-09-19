@@ -29,8 +29,7 @@ export class HomeComponent implements OnInit {
   searchTerm = '';
   selectedTag = '';
 
-  tags = ['Banco de Dados', 'Ferramentas', 'RH', 'Desenvolvimento', 'Infraestrutura'];
-
+  tags: string[] = [];
   topics: TopicDisplay[] = [];
   progressStats = {
     completed: 0,
@@ -47,6 +46,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.loadUserTopics();
     this.loadProgressStats();
+    this.loadAvailableCategories();
   }
 
   loadUserTopics() {
@@ -97,6 +97,46 @@ export class HomeComponent implements OnInit {
   clearSearch() {
     this.searchTerm = '';
     this.selectedTag = '';
+  }
+
+  loadAvailableCategories() {
+    this.topicService.getAvailableCategories().subscribe(categories => {
+      this.tags = categories;
+    });
+  }
+
+  filterByCategory(category: string) {
+    this.selectedTag = this.selectedTag === category ? '' : category;
+  }
+
+  getUserAreaTopics() {
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser?.perfil) return this.filteredTopics;
+
+    // Mapear perfis para categorias correspondentes
+    const areaMapping: { [key: string]: string } = {
+      'Desenvolvimento': 'Desenvolvimento',
+      'Infraestrutura': 'Infraestrutura',
+      'QA': 'QA',
+      'Produto': 'Produto',
+      'Dados': 'Dados',
+      'Design': 'Design',
+      'Gestão': 'Gestão'
+    };
+
+    const userArea = areaMapping[currentUser.perfil];
+    if (!userArea) return this.filteredTopics;
+
+    // Retornar tópicos da área do usuário prioritariamente
+    const areaTopics = this.filteredTopics.filter(topic =>
+      topic.tags.includes(userArea)
+    );
+
+    const otherTopics = this.filteredTopics.filter(topic =>
+      !topic.tags.includes(userArea)
+    );
+
+    return [...areaTopics, ...otherTopics];
   }
 
 }

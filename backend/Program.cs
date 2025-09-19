@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.FileProviders;
 using System.Text;
 using backend.Data;
 using backend.Middleware;
@@ -96,19 +97,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IProgressService, ProgressService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
-// CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngularApp",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:4200", "http://localhost:4201")
-                  .AllowAnyMethod()
-                  .AllowAnyHeader()
-                  .AllowCredentials();
-        });
-});
+// CORS será tratado por middleware customizado
 
 var app = builder.Build();
 
@@ -152,6 +143,9 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// CORS deve ser o primeiro middleware
+app.UseMiddleware<CorsMiddleware>();
+
 // Configure pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -164,7 +158,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
-app.UseCors("AllowAngularApp");
+
+// Configurar arquivos estáticos para servir PDFs
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files")),
+    RequestPath = "/files"
+});
+
+app.UseStaticFiles(); // Para outros arquivos estáticos
+
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

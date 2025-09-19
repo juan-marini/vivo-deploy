@@ -1,0 +1,438 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R 4 0 R 5 0 R 6 0 R 7 0 R]
+/Count 5
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 8 0 R
+/Resources <<
+/Font <<
+/F1 9 0 R
+/F2 10 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 11 0 R
+/Resources <<
+/Font <<
+/F1 9 0 R
+/F2 10 0 R
+>>
+>>
+>>
+endobj
+
+5 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 12 0 R
+/Resources <<
+/Font <<
+/F1 9 0 R
+/F2 10 0 R
+>>
+>>
+>>
+endobj
+
+6 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 13 0 R
+/Resources <<
+/Font <<
+/F1 9 0 R
+/F2 10 0 R
+>>
+>>
+>>
+endobj
+
+7 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 14 0 R
+/Resources <<
+/Font <<
+/F1 9 0 R
+/F2 10 0 R
+>>
+>>
+>>
+endobj
+
+8 0 obj
+<<
+/Length 900
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(ASP.NET Core Tutorial) Tj
+0 -40 Td
+/F2 16 Tf
+(Desenvolvimento Web Moderno) Tj
+0 -80 Td
+/F1 18 Tf
+(1. Introducao ao ASP.NET Core) Tj
+0 -40 Td
+/F2 12 Tf
+(ASP.NET Core e um framework web multiplataforma, open-source) Tj
+0 -20 Td
+(e de alto desempenho para criar aplicacoes web modernas.) Tj
+0 -40 Td
+/F1 14 Tf
+(Principais Recursos:) Tj
+0 -30 Td
+/F2 12 Tf
+(• MVC \(Model-View-Controller\)) Tj
+0 -20 Td
+(• Web API para servicos REST) Tj
+0 -20 Td
+(• Razor Pages para aplicacoes web) Tj
+0 -20 Td
+(• SignalR para comunicacao em tempo real) Tj
+0 -20 Td
+(• Blazor para SPAs com C#) Tj
+0 -40 Td
+/F1 14 Tf
+(Arquitetura:) Tj
+0 -30 Td
+/F2 12 Tf
+(• Host Web integrado \(Kestrel\)) Tj
+0 -20 Td
+(• Pipeline de middleware personalizavel) Tj
+0 -20 Td
+(• Injecao de dependencia nativa) Tj
+0 -20 Td
+(• Sistema de configuracao flexivel) Tj
+0 -20 Td
+(• Suporte a containerizacao) Tj
+ET
+endstream
+endobj
+
+9 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica-Bold
+>>
+endobj
+
+10 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+11 0 obj
+<<
+/Length 850
+>>
+stream
+BT
+/F1 18 Tf
+50 750 Td
+(2. Criando seu Primeiro Projeto) Tj
+0 -40 Td
+/F1 14 Tf
+(Passo a Passo:) Tj
+0 -30 Td
+/F2 12 Tf
+(1. Abra o terminal/prompt de comando) Tj
+0 -20 Td
+(2. Execute: dotnet new webapi -n MinhaPrimeiraAPI) Tj
+0 -20 Td
+(3. Navegue para a pasta: cd MinhaPrimeiraAPI) Tj
+0 -20 Td
+(4. Execute: dotnet run) Tj
+0 -20 Td
+(5. Acesse: https://localhost:5001/swagger) Tj
+0 -40 Td
+/F1 14 Tf
+(Estrutura do Projeto:) Tj
+0 -30 Td
+/F2 12 Tf
+(• Program.cs - Configuracao da aplicacao) Tj
+0 -20 Td
+(• Controllers/ - Controladores da API) Tj
+0 -20 Td
+(• Models/ - Modelos de dados) Tj
+0 -20 Td
+(• appsettings.json - Configuracoes) Tj
+0 -20 Td
+(• Properties/launchSettings.json - Configuracoes de execucao) Tj
+0 -40 Td
+/F1 14 Tf
+(Program.cs Explicado:) Tj
+0 -30 Td
+/F2 10 Tf
+(var builder = WebApplication.CreateBuilder\(args\);) Tj
+0 -15 Td
+(builder.Services.AddControllers\(\);) Tj
+0 -15 Td
+(var app = builder.Build\(\);) Tj
+0 -15 Td
+(app.MapControllers\(\);) Tj
+0 -15 Td
+(app.Run\(\);) Tj
+ET
+endstream
+endobj
+
+12 0 obj
+<<
+/Length 950
+>>
+stream
+BT
+/F1 18 Tf
+50 750 Td
+(3. Criando Controllers e Actions) Tj
+0 -40 Td
+/F1 14 Tf
+(Exemplo de Controller:) Tj
+0 -30 Td
+/F2 10 Tf
+([ApiController]) Tj
+0 -15 Td
+([Route\("api/[controller]"\)]) Tj
+0 -15 Td
+(public class ProdutosController : ControllerBase) Tj
+0 -15 Td
+({) Tj
+0 -15 Td
+(    private static List<Produto> produtos = new\(\);) Tj
+0 -25 Td
+(    [HttpGet]) Tj
+0 -15 Td
+(    public ActionResult<IEnumerable<Produto>> Get\(\)) Tj
+0 -15 Td
+(    {) Tj
+0 -15 Td
+(        return Ok\(produtos\);) Tj
+0 -15 Td
+(    }) Tj
+0 -25 Td
+(    [HttpPost]) Tj
+0 -15 Td
+(    public ActionResult<Produto> Post\(Produto produto\)) Tj
+0 -15 Td
+(    {) Tj
+0 -15 Td
+(        produtos.Add\(produto\);) Tj
+0 -15 Td
+(        return CreatedAtAction\(nameof\(Get\), produto\);) Tj
+0 -15 Td
+(    }) Tj
+0 -15 Td
+(}) Tj
+0 -40 Td
+/F1 14 Tf
+(HTTP Verbs Suportados:) Tj
+0 -30 Td
+/F2 12 Tf
+(• GET - Recuperar dados) Tj
+0 -20 Td
+(• POST - Criar recursos) Tj
+0 -20 Td
+(• PUT - Atualizar recursos) Tj
+0 -20 Td
+(• DELETE - Remover recursos) Tj
+0 -20 Td
+(• PATCH - Atualizacao parcial) Tj
+ET
+endstream
+endobj
+
+13 0 obj
+<<
+/Length 900
+>>
+stream
+BT
+/F1 18 Tf
+50 750 Td
+(4. Middleware e Pipeline) Tj
+0 -40 Td
+/F1 14 Tf
+(O que e Middleware?) Tj
+0 -30 Td
+/F2 12 Tf
+(Middleware sao componentes que formam o pipeline de) Tj
+0 -20 Td
+(processamento de requisicoes HTTP.) Tj
+0 -40 Td
+/F1 14 Tf
+(Configurando Middleware:) Tj
+0 -30 Td
+/F2 10 Tf
+(app.UseRouting\(\);) Tj
+0 -15 Td
+(app.UseAuthentication\(\);) Tj
+0 -15 Td
+(app.UseAuthorization\(\);) Tj
+0 -15 Td
+(app.UseCors\(\);) Tj
+0 -15 Td
+(app.MapControllers\(\);) Tj
+0 -40 Td
+/F1 14 Tf
+(Middleware Personalizado:) Tj
+0 -30 Td
+/F2 10 Tf
+(app.Use\(async \(context, next\) =>) Tj
+0 -15 Td
+({) Tj
+0 -15 Td
+(    // Logica antes da proxima middleware) Tj
+0 -15 Td
+(    await next\(context\);) Tj
+0 -15 Td
+(    // Logica apos a proxima middleware) Tj
+0 -15 Td
+(}\);) Tj
+0 -40 Td
+/F1 14 Tf
+(Ordem dos Middleware:) Tj
+0 -30 Td
+/F2 12 Tf
+(1. Exception Handling) Tj
+0 -20 Td
+(2. HSTS) Tj
+0 -20 Td
+(3. HTTPS Redirection) Tj
+0 -20 Td
+(4. Static Files) Tj
+0 -20 Td
+(5. Routing) Tj
+0 -20 Td
+(6. Authentication) Tj
+0 -20 Td
+(7. Authorization) Tj
+ET
+endstream
+endobj
+
+14 0 obj
+<<
+/Length 800
+>>
+stream
+BT
+/F1 18 Tf
+50 750 Td
+(5. Entity Framework Core) Tj
+0 -40 Td
+/F1 14 Tf
+(Configurando o DbContext:) Tj
+0 -30 Td
+/F2 10 Tf
+(public class AppDbContext : DbContext) Tj
+0 -15 Td
+({) Tj
+0 -15 Td
+(    public DbSet<Produto> Produtos { get; set; }) Tj
+0 -15 Td
+(    protected override void OnConfiguring\(\)) Tj
+0 -15 Td
+(        DbContextOptionsBuilder optionsBuilder\)) Tj
+0 -15 Td
+(    {) Tj
+0 -15 Td
+(        optionsBuilder.UseSqlServer\(connectionString\);) Tj
+0 -15 Td
+(    }) Tj
+0 -15 Td
+(}) Tj
+0 -40 Td
+/F1 14 Tf
+(Registrando no Container DI:) Tj
+0 -30 Td
+/F2 10 Tf
+(builder.Services.AddDbContext<AppDbContext>\(options =>) Tj
+0 -15 Td
+(    options.UseSqlServer\(connectionString\)\);) Tj
+0 -40 Td
+/F1 14 Tf
+(Migrations:) Tj
+0 -30 Td
+/F2 12 Tf
+(• dotnet ef migrations add InitialCreate) Tj
+0 -20 Td
+(• dotnet ef database update) Tj
+0 -40 Td
+/F1 14 Tf
+(CRUD Operations:) Tj
+0 -30 Td
+/F2 12 Tf
+(• context.Produtos.Add\(produto\)) Tj
+0 -20 Td
+(• context.Produtos.Find\(id\)) Tj
+0 -20 Td
+(• context.Produtos.Update\(produto\)) Tj
+0 -20 Td
+(• context.Produtos.Remove\(produto\)) Tj
+0 -20 Td
+(• context.SaveChanges\(\)) Tj
+ET
+endstream
+endobj
+
+xref
+0 15
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000140 00000 n
+0000000277 00000 n
+0000000414 00000 n
+0000000551 00000 n
+0000000688 00000 n
+0000000825 00000 n
+0000001776 00000 n
+0000001837 00000 n
+0000001892 00000 n
+0000002793 00000 n
+0000003794 00000 n
+0000004745 00000 n
+trailer
+<<
+/Size 15
+/Root 1 0 R
+>>
+startxref
+5596
+%%EOF

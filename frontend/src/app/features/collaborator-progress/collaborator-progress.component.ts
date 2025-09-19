@@ -26,6 +26,10 @@ export class CollaboratorProgressComponent implements OnInit {
     this.collaboratorId = this.route.snapshot.paramMap.get('id');
     if (this.collaboratorId) {
       this.loadCollaboratorData();
+      // Atualizar dados automaticamente a cada 30 segundos
+      setInterval(() => {
+        this.refreshCollaboratorDataSilent();
+      }, 30000);
     } else {
       this.router.navigate(['/dashboard']);
     }
@@ -49,13 +53,32 @@ export class CollaboratorProgressComponent implements OnInit {
     });
   }
 
+  private refreshCollaboratorDataSilent() {
+    if (!this.collaboratorId) return;
+
+    // Refresh silencioso sem loading
+    this.dashboardService.getMemberDetailedProgress(this.collaboratorId).subscribe({
+      next: (data) => {
+        this.collaboratorData = data;
+        console.log('Dados do colaborador atualizados automaticamente');
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar dados do colaborador:', error);
+      }
+    });
+  }
+
+  manualRefresh() {
+    this.loadCollaboratorData();
+  }
+
   goBack() {
     this.router.navigate(['/dashboard']);
   }
 
   // Métodos para cálculos de progresso
   getOverallProgress(): number {
-    if (!this.collaboratorData) return 0;
+    if (!this.collaboratorData || this.collaboratorData.totalTopics === 0) return 0;
     return Math.round((this.collaboratorData.completedTopics / this.collaboratorData.totalTopics) * 100);
   }
 
@@ -111,7 +134,7 @@ export class CollaboratorProgressComponent implements OnInit {
       name,
       total: data.total,
       completed: data.completed,
-      percentage: Math.round((data.completed / data.total) * 100)
+      percentage: data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0
     }));
   }
 

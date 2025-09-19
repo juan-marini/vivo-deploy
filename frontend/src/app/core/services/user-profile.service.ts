@@ -38,15 +38,26 @@ export class UserProfileService {
   }
 
   isAdmin(): boolean {
-    return this.getUserRole() === UserRole.ADMIN;
+    const role = this.getUserRole();
+    return role === UserRole.ADMIN || role === 'Administrador';
   }
 
   isGestor(): boolean {
-    return this.getUserRole() === UserRole.GESTOR || this.isAdmin();
+    const role = this.getUserRole();
+    return role === UserRole.GESTOR ||
+           role === 'Gestão' ||
+           this.isAdmin();
   }
 
   isColaborador(): boolean {
-    return this.getUserRole() === UserRole.COLABORADOR;
+    const role = this.getUserRole();
+    return role === UserRole.COLABORADOR ||
+           role === 'Desenvolvimento' ||
+           role === 'Infraestrutura' ||
+           role === 'QA' ||
+           role === 'Produto' ||
+           role === 'Dados' ||
+           role === 'Design';
   }
 
   getWelcomeMessage(): string {

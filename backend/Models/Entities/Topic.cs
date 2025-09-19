@@ -20,7 +20,7 @@ namespace backend.Models.Entities
         [MaxLength(20)]
         public string EstimatedTime { get; set; } = string.Empty;
 
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        // public DateTime CreatedDate { get; set; } = DateTime.UtcNow; // Comentado temporariamente - coluna não existe no banco
 
         public bool IsActive { get; set; } = true;
 
