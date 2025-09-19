@@ -223,44 +223,77 @@ namespace backend.Services.Implementations
 
         public async Task<List<TopicDto>> GetAllTopicsAsync()
         {
-            var topics = await _context.Topics
-                .Where(t => t.IsActive)
-                .Include(t => t.Documents)
-                .Include(t => t.Links)
-                .Include(t => t.Contacts)
-                .ToListAsync();
-
-            return topics.Select(t => new TopicDto
+            try
             {
-                Id = t.Id,
-                Title = t.Title,
-                Description = t.Description,
-                Category = t.Category ?? "Geral",
-                EstimatedTime = t.EstimatedTime,
-                Documents = t.Documents?.Select(d => new TopicDocumentDto
+                Console.WriteLine("📊 Starting GetAllTopicsAsync...");
+
+                // First, try to get topics without includes to test basic connectivity
+                var topicsBasic = await _context.Topics
+                    .Where(t => t.IsActive)
+                    .ToListAsync();
+
+                Console.WriteLine($"📋 Found {topicsBasic.Count} active topics");
+
+                // Try to load with related entities
+                List<Topic> topics;
+                try
                 {
-                    Id = d.Id,
-                    Title = d.Title,
-                    Type = d.Type,
-                    Url = d.Url,
-                    Size = d.Size ?? "1MB"
-                }).ToList() ?? new List<TopicDocumentDto>(),
-                Links = t.Links?.Select(l => new TopicLinkDto
+                    topics = await _context.Topics
+                        .Where(t => t.IsActive)
+                        .Include(t => t.Documents)
+                        .Include(t => t.Links)
+                        .Include(t => t.Contacts)
+                        .ToListAsync();
+                    Console.WriteLine("✅ Successfully loaded topics with related entities");
+                }
+                catch (Exception includeEx)
                 {
-                    Id = l.Id,
-                    Title = l.Title,
-                    Url = l.Url
-                }).ToList() ?? new List<TopicLinkDto>(),
-                Contacts = t.Contacts?.Select(c => new TopicContactDto
+                    Console.WriteLine($"⚠️ Error loading with includes: {includeEx.Message}");
+                    Console.WriteLine("🔄 Falling back to basic topics without related entities");
+                    topics = topicsBasic;
+                }
+
+                var result = topics.Select(t => new TopicDto
                 {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Role = c.Role,
-                    Email = c.Email,
-                    Phone = c.Phone,
-                    Department = c.Department
-                }).ToList() ?? new List<TopicContactDto>()
-            }).ToList();
+                    Id = t.Id,
+                    Title = t.Title,
+                    Description = t.Description,
+                    Category = t.Category ?? "Geral",
+                    EstimatedTime = t.EstimatedTime,
+                    Documents = t.Documents?.Select(d => new TopicDocumentDto
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        Type = d.Type,
+                        Url = d.Url,
+                        Size = d.Size ?? "1MB"
+                    }).ToList() ?? new List<TopicDocumentDto>(),
+                    Links = t.Links?.Select(l => new TopicLinkDto
+                    {
+                        Id = l.Id,
+                        Title = l.Title,
+                        Url = l.Url
+                    }).ToList() ?? new List<TopicLinkDto>(),
+                    Contacts = t.Contacts?.Select(c => new TopicContactDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Role = c.Role,
+                        Email = c.Email,
+                        Phone = c.Phone,
+                        Department = c.Department
+                    }).ToList() ?? new List<TopicContactDto>()
+                }).ToList();
+
+                Console.WriteLine($"✅ Returning {result.Count} topics");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in GetAllTopicsAsync: {ex.Message}");
+                Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         private bool HasStartedTopic(string userId, int topicId)

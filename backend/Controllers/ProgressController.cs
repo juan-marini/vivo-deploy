@@ -99,12 +99,23 @@ namespace backend.Controllers
         {
             try
             {
+                Console.WriteLine("🔍 Fetching topics from database...");
                 var topics = await _progressService.GetAllTopicsAsync();
+                Console.WriteLine($"✅ Retrieved {topics.Count} topics successfully");
                 return Ok(topics);
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error retrieving topics: {ex.Message}");
+                Console.WriteLine($"❌ Error in GetAllTopics: {ex.Message}");
+                Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
+                Console.WriteLine($"❌ Inner exception: {ex.InnerException?.Message}");
+
+                return BadRequest(new {
+                    error = "Error retrieving topics",
+                    message = ex.Message,
+                    innerError = ex.InnerException?.Message,
+                    timestamp = DateTime.UtcNow
+                });
             }
         }
 
