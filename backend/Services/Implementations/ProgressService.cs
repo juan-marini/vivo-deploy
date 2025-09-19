@@ -224,6 +224,7 @@ namespace backend.Services.Implementations
         public async Task<List<TopicDto>> GetAllTopicsAsync()
         {
             var topics = await _context.Topics
+                .Where(t => t.IsActive)
                 .Select(t => new TopicDto
                 {
                     Id = t.Id,
@@ -231,21 +232,28 @@ namespace backend.Services.Implementations
                     Description = t.Description,
                     Category = t.Category ?? "Geral",
                     EstimatedTime = t.EstimatedTime,
-                    Documents = new List<TopicDocumentDto>
-                    {
-                        new TopicDocumentDto
-                        {
-                            Id = t.Id,
-                            Title = t.PdfFileName ?? "Documento",
-                            Type = "pdf",
-                            Url = t.PdfUrl ?? "",
-                            Size = "2MB"
-                        }
-                    }.Where(d => !string.IsNullOrEmpty(d.Url)).ToList(),
+                    Documents = new List<TopicDocumentDto>(),
                     Links = new List<TopicLinkDto>(),
                     Contacts = new List<TopicContactDto>()
                 })
                 .ToListAsync();
+
+            // Add documents manually after the query
+            foreach (var topic in topics)
+            {
+                var topicEntity = await _context.Topics.FirstOrDefaultAsync(t => t.Id == topic.Id);
+                if (topicEntity != null && !string.IsNullOrEmpty(topicEntity.PdfUrl))
+                {
+                    topic.Documents.Add(new TopicDocumentDto
+                    {
+                        Id = topicEntity.Id,
+                        Title = topicEntity.PdfFileName ?? "Documento",
+                        Type = "pdf",
+                        Url = topicEntity.PdfUrl,
+                        Size = "2MB"
+                    });
+                }
+            }
 
             return topics;
         }
