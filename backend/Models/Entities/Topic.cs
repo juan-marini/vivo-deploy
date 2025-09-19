@@ -20,6 +20,12 @@ namespace backend.Models.Entities
         [MaxLength(20)]
         public string EstimatedTime { get; set; } = string.Empty;
 
+        [MaxLength(255)]
+        public string? PdfFileName { get; set; }
+
+        [MaxLength(500)]
+        public string? PdfUrl { get; set; }
+
         // public DateTime CreatedDate { get; set; } = DateTime.UtcNow; // Comentado temporariamente - coluna não existe no banco
 
         public bool IsActive { get; set; } = true;

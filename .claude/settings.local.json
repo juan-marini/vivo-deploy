@@ -45,7 +45,11 @@
       "Bash(start test-direct-download.html)",
       "Bash(docker-compose:*)",
       "Bash(docker exec:*)",
-      "Bash(del \"C:\\Users\\usuario\\Desktop\\vivo-onboardingg\\vivo-onboarding\\Dockerfile\")"
+      "Bash(del \"C:\\Users\\usuario\\Desktop\\vivo-onboardingg\\vivo-onboarding\\Dockerfile\")",
+      "Bash(start generate-passwords.html)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(start execute-password-update.html)"
     ],
     "deny": [],
     "ask": []

@@ -224,40 +224,26 @@ namespace backend.Services.Implementations
         public async Task<List<TopicDto>> GetAllTopicsAsync()
         {
             var topics = await _context.Topics
-                .Include(t => t.Documents)
-                .Include(t => t.Links)
-                .Include(t => t.Contacts)
-                .Where(t => t.IsActive)
                 .Select(t => new TopicDto
                 {
                     Id = t.Id,
                     Title = t.Title,
                     Description = t.Description,
-                    Category = t.Category,
+                    Category = t.Category ?? "Geral",
                     EstimatedTime = t.EstimatedTime,
-                    Documents = t.Documents.Select(d => new TopicDocumentDto
+                    Documents = new List<TopicDocumentDto>
                     {
-                        Id = d.Id,
-                        Title = d.Title,
-                        Type = d.Type,
-                        Url = d.Url,
-                        Size = d.Size
-                    }).ToList(),
-                    Links = t.Links.Select(l => new TopicLinkDto
-                    {
-                        Id = l.Id,
-                        Title = l.Title,
-                        Url = l.Url
-                    }).ToList(),
-                    Contacts = t.Contacts.Select(c => new TopicContactDto
-                    {
-                        Id = c.Id,
-                        Name = c.Name,
-                        Role = c.Role,
-                        Email = c.Email,
-                        Phone = c.Phone,
-                        Department = c.Department
-                    }).ToList()
+                        new TopicDocumentDto
+                        {
+                            Id = t.Id,
+                            Title = t.PdfFileName ?? "Documento",
+                            Type = "pdf",
+                            Url = t.PdfUrl ?? "",
+                            Size = "2MB"
+                        }
+                    }.Where(d => !string.IsNullOrEmpty(d.Url)).ToList(),
+                    Links = new List<TopicLinkDto>(),
+                    Contacts = new List<TopicContactDto>()
                 })
                 .ToListAsync();
 

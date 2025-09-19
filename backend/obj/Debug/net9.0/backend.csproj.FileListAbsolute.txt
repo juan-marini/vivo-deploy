@@ -234,3 +234,4 @@ C:\Users\usuario\Desktop\vivo-onboardingg\vivo-onboarding\backend\obj\Debug\net9
 C:\Users\usuario\Desktop\vivo-onboardingg\vivo-onboarding\backend\obj\Debug\net9.0\backend.pdb
 C:\Users\usuario\Desktop\vivo-onboardingg\vivo-onboarding\backend\obj\Debug\net9.0\backend.genruntimeconfig.cache
 C:\Users\usuario\Desktop\vivo-onboardingg\vivo-onboarding\backend\obj\Debug\net9.0\ref\backend.dll
+C:\Users\usuario\Desktop\vivo-onboardingg\vivo-onboarding\backend\bin\Debug\net9.0\appsettings.Production.json
