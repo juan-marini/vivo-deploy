@@ -46,7 +46,7 @@ export class TopicDetailsComponent implements OnInit {
       topic.contacts = this.getContactsForTopic(this.topicId);
 
       this.topic = topic;
-      console.log('✅ Tópico carregado:', {
+      console.log('✅ Tópico carregado com links e contatos:', {
         id: topic.id,
         title: topic.title,
         documents: topic.documents?.length || 0,
