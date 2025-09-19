@@ -99,45 +99,45 @@ export class TopicDetailsComponent implements OnInit {
         { id: 101, title: 'Power BI Learning', type: 'link', url: 'https://powerbi.microsoft.com/learning/' },
         { id: 102, title: 'Power BI Documentation', type: 'link', url: 'https://docs.microsoft.com/power-bi/' }
       ],
-      11: [ // Clean Code
-        { id: 111, title: 'Clean Code Principles', type: 'link', url: 'https://clean-code-developer.com/' },
-        { id: 112, title: 'Refactoring Guru', type: 'link', url: 'https://refactoring.guru/' }
+      11: [ // UX/UI Design (ID real: 11)
+        { id: 111, title: 'Nielsen Norman Group', type: 'link', url: 'https://www.nngroup.com/' },
+        { id: 112, title: 'Material Design', type: 'link', url: 'https://material.io/design' }
       ],
-      12: [ // Git e Versionamento
-        { id: 121, title: 'Git Documentation', type: 'link', url: 'https://git-scm.com/doc' },
-        { id: 122, title: 'Atlassian Git Tutorials', type: 'link', url: 'https://www.atlassian.com/git/tutorials' }
+      12: [ // Clean Code (ID real: 12)
+        { id: 121, title: 'Clean Code Principles', type: 'link', url: 'https://clean-code-developer.com/' },
+        { id: 122, title: 'Refactoring Guru', type: 'link', url: 'https://refactoring.guru/' }
       ],
-      13: [ // Python para Dados
-        { id: 131, title: 'Python Data Science Handbook', type: 'link', url: 'https://jakevdp.github.io/PythonDataScienceHandbook/' },
-        { id: 132, title: 'Pandas Documentation', type: 'link', url: 'https://pandas.pydata.org/docs/' }
+      13: [ // Git e Versionamento (ID real: 13)
+        { id: 131, title: 'Git Documentation', type: 'link', url: 'https://git-scm.com/doc' },
+        { id: 132, title: 'Atlassian Git Tutorials', type: 'link', url: 'https://www.atlassian.com/git/tutorials' }
       ],
-      14: [ // Kubernetes
-        { id: 141, title: 'Kubernetes Documentation', type: 'link', url: 'https://kubernetes.io/docs/' },
-        { id: 142, title: 'Kubernetes Tutorials', type: 'link', url: 'https://kubernetes.io/docs/tutorials/' }
+      14: [ // Python para Dados (ID real: 14)
+        { id: 141, title: 'Python Data Science Handbook', type: 'link', url: 'https://jakevdp.github.io/PythonDataScienceHandbook/' },
+        { id: 142, title: 'Pandas Documentation', type: 'link', url: 'https://pandas.pydata.org/docs/' }
       ],
-      15: [ // Liderança e Gestão
-        { id: 151, title: 'Harvard Business Review', type: 'link', url: 'https://hbr.org/topic/leadership' },
-        { id: 152, title: 'Management 3.0', type: 'link', url: 'https://management30.com/' }
+      15: [ // Kubernetes (ID real: 15)
+        { id: 151, title: 'Kubernetes Documentation', type: 'link', url: 'https://kubernetes.io/docs/' },
+        { id: 152, title: 'Kubernetes Tutorials', type: 'link', url: 'https://kubernetes.io/docs/tutorials/' }
       ],
-      16: [ // Machine Learning
-        { id: 161, title: 'Google AI Education', type: 'link', url: 'https://ai.google/education/' },
-        { id: 162, title: 'Coursera ML Course', type: 'link', url: 'https://www.coursera.org/learn/machine-learning' }
+      16: [ // Liderança e Gestão (ID real: 16)
+        { id: 161, title: 'Harvard Business Review', type: 'link', url: 'https://hbr.org/topic/leadership' },
+        { id: 162, title: 'Management 3.0', type: 'link', url: 'https://management30.com/' }
       ],
-      17: [ // APIs RESTful
-        { id: 171, title: 'REST API Tutorial', type: 'link', url: 'https://restfulapi.net/' },
-        { id: 172, title: 'Postman Learning Center', type: 'link', url: 'https://learning.postman.com/' }
+      17: [ // Machine Learning (ID real: 17)
+        { id: 171, title: 'Google AI Education', type: 'link', url: 'https://ai.google/education/' },
+        { id: 172, title: 'Coursera ML Course', type: 'link', url: 'https://www.coursera.org/learn/machine-learning' }
       ],
-      18: [ // Cybersecurity
-        { id: 181, title: 'NIST Cybersecurity Framework', type: 'link', url: 'https://www.nist.gov/cyberframework' },
-        { id: 182, title: 'SANS Institute', type: 'link', url: 'https://www.sans.org/' }
+      18: [ // APIs RESTful (ID real: 18)
+        { id: 181, title: 'REST API Tutorial', type: 'link', url: 'https://restfulapi.net/' },
+        { id: 182, title: 'Postman Learning Center', type: 'link', url: 'https://learning.postman.com/' }
       ],
-      19: [ // Product Management
-        { id: 191, title: 'Product Management Guide', type: 'link', url: 'https://www.productplan.com/learn/' },
-        { id: 192, title: 'Mind the Product', type: 'link', url: 'https://www.mindtheproduct.com/' }
+      19: [ // Cybersecurity (ID real: 19)
+        { id: 191, title: 'NIST Cybersecurity Framework', type: 'link', url: 'https://www.nist.gov/cyberframework' },
+        { id: 192, title: 'SANS Institute', type: 'link', url: 'https://www.sans.org/' }
       ],
-      20: [ // UX/UI Design
-        { id: 201, title: 'Nielsen Norman Group', type: 'link', url: 'https://www.nngroup.com/' },
-        { id: 202, title: 'Material Design', type: 'link', url: 'https://material.io/design' }
+      20: [ // Product Management (ID real: 20)
+        { id: 201, title: 'Product Management Guide', type: 'link', url: 'https://www.productplan.com/learn/' },
+        { id: 202, title: 'Mind the Product', type: 'link', url: 'https://www.mindtheproduct.com/' }
       ]
     };
     return linksMap[topicId] || [];
@@ -177,35 +177,35 @@ export class TopicDetailsComponent implements OnInit {
       10: [ // Power BI
         { id: 101, name: 'Felipe BI', role: 'BI Developer', email: 'felipe.bi@vivo.com.br', phone: '(11) 9999-1010', department: 'Dados' }
       ],
-      11: [ // Clean Code
-        { id: 111, name: 'Eduardo Clean', role: 'Senior Developer', email: 'eduardo.clean@vivo.com.br', phone: '(11) 9999-1111', department: 'Desenvolvimento' }
+      11: [ // UX/UI Design (ID real: 11)
+        { id: 111, name: 'Isabella Design', role: 'UX/UI Designer', email: 'isabella.design@vivo.com.br', phone: '(11) 9999-2020', department: 'Design' }
       ],
-      12: [ // Git e Versionamento
-        { id: 121, name: 'Marina Git', role: 'DevOps Lead', email: 'marina.git@vivo.com.br', phone: '(11) 9999-1212', department: 'Infraestrutura' }
+      12: [ // Clean Code (ID real: 12)
+        { id: 121, name: 'Eduardo Clean', role: 'Senior Developer', email: 'eduardo.clean@vivo.com.br', phone: '(11) 9999-1111', department: 'Desenvolvimento' }
       ],
-      13: [ // Python para Dados
-        { id: 131, name: 'Rafael Python', role: 'Data Scientist', email: 'rafael.python@vivo.com.br', phone: '(11) 9999-1313', department: 'Dados' }
+      13: [ // Git e Versionamento (ID real: 13)
+        { id: 131, name: 'Marina Git', role: 'DevOps Lead', email: 'marina.git@vivo.com.br', phone: '(11) 9999-1212', department: 'Infraestrutura' }
       ],
-      14: [ // Kubernetes
-        { id: 141, name: 'Paula K8s', role: 'Cloud Architect', email: 'paula.k8s@vivo.com.br', phone: '(11) 9999-1414', department: 'Infraestrutura' }
+      14: [ // Python para Dados (ID real: 14)
+        { id: 141, name: 'Rafael Python', role: 'Data Scientist', email: 'rafael.python@vivo.com.br', phone: '(11) 9999-1313', department: 'Dados' }
       ],
-      15: [ // Liderança e Gestão
-        { id: 151, name: 'Carlos Manager', role: 'Engineering Manager', email: 'carlos.manager@vivo.com.br', phone: '(11) 9999-1515', department: 'Gestão' }
+      15: [ // Kubernetes (ID real: 15)
+        { id: 151, name: 'Paula K8s', role: 'Cloud Architect', email: 'paula.k8s@vivo.com.br', phone: '(11) 9999-1414', department: 'Infraestrutura' }
       ],
-      16: [ // Machine Learning
-        { id: 161, name: 'Amanda ML', role: 'ML Engineer', email: 'amanda.ml@vivo.com.br', phone: '(11) 9999-1616', department: 'Dados' }
+      16: [ // Liderança e Gestão (ID real: 16)
+        { id: 161, name: 'Carlos Manager', role: 'Engineering Manager', email: 'carlos.manager@vivo.com.br', phone: '(11) 9999-1515', department: 'Gestão' }
       ],
-      17: [ // APIs RESTful
-        { id: 171, name: 'Thiago API', role: 'Backend Developer', email: 'thiago.api@vivo.com.br', phone: '(11) 9999-1717', department: 'Desenvolvimento' }
+      17: [ // Machine Learning (ID real: 17)
+        { id: 171, name: 'Amanda ML', role: 'ML Engineer', email: 'amanda.ml@vivo.com.br', phone: '(11) 9999-1616', department: 'Dados' }
       ],
-      18: [ // Cybersecurity
-        { id: 181, name: 'Sophia Security', role: 'Cybersecurity Specialist', email: 'sophia.security@vivo.com.br', phone: '(11) 9999-1818', department: 'Segurança' }
+      18: [ // APIs RESTful (ID real: 18)
+        { id: 181, name: 'Thiago API', role: 'Backend Developer', email: 'thiago.api@vivo.com.br', phone: '(11) 9999-1717', department: 'Desenvolvimento' }
       ],
-      19: [ // Product Management
-        { id: 191, name: 'Daniel Product', role: 'Product Manager', email: 'daniel.product@vivo.com.br', phone: '(11) 9999-1919', department: 'Produto' }
+      19: [ // Cybersecurity (ID real: 19)
+        { id: 191, name: 'Sophia Security', role: 'Cybersecurity Specialist', email: 'sophia.security@vivo.com.br', phone: '(11) 9999-1818', department: 'Segurança' }
       ],
-      20: [ // UX/UI Design
-        { id: 201, name: 'Isabella Design', role: 'UX/UI Designer', email: 'isabella.design@vivo.com.br', phone: '(11) 9999-2020', department: 'Design' }
+      20: [ // Product Management (ID real: 20)
+        { id: 201, name: 'Daniel Product', role: 'Product Manager', email: 'daniel.product@vivo.com.br', phone: '(11) 9999-1919', department: 'Produto' }
       ]
     };
     return contactsMap[topicId] || [];
