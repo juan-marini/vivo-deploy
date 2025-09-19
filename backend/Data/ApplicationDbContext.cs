@@ -44,6 +44,15 @@ namespace backend.Data
                 .HasForeignKey(s => s.UsuarioId);
 
             // Configuração das tabelas de Topics
+            modelBuilder.Entity<TopicDocument>()
+                .ToTable("topicdocuments");
+
+            modelBuilder.Entity<TopicLink>()
+                .ToTable("links_uteis");
+
+            modelBuilder.Entity<TopicContact>()
+                .ToTable("contatos_referencia");
+
             modelBuilder.Entity<Topic>()
                 .HasMany(t => t.Documents)
                 .WithOne(d => d.Topic)

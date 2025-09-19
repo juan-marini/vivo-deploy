@@ -101,19 +101,19 @@
                   Links Úteis
                 </h4>
                 <div class="list-group list-group-flush">
-                  <a *ngFor="let link of topic.links"
-                     [href]="link.url"
-                     target="_blank"
-                     class="list-group-item list-group-item-action border-0 px-0 py-2 text-decoration-none hover-bg-light rounded">
-                    <div class="d-flex align-items-center">
-                      <i class="fas fa-link text-purple me-3" style="font-size: 1.1rem;"></i>
-                      <span class="text-dark fw-medium">{{ link.title }}</span>
-                      <i class="fas fa-external-link-alt text-muted ms-auto small"></i>
-                    </div>
-                  </a>
-                  <div *ngIf="topic.links.length === 0" class="text-muted text-center py-3">
-                    <i class="fas fa-link mb-2"></i>
+                  <div *ngFor="let link of topic.links" class="list-group-item border-0 px-0 py-2">
+                    <a [href]="link.url" target="_blank" class="list-group-item-action text-decoration-none hover-bg-light rounded d-block p-2">
+                      <div class="d-flex align-items-center">
+                        <i class="fas fa-link text-purple me-3" style="font-size: 1.1rem;"></i>
+                        <span class="text-dark fw-medium">{{ link.title }}</span>
+                        <i class="fas fa-external-link-alt text-muted ms-auto small"></i>
+                      </div>
+                    </a>
+                  </div>
+                  <div *ngIf="!topic.links || topic.links?.length === 0" class="text-muted text-center py-3">
+                    <i class="fas fa-inbox mb-2"></i>
                     <div>Nenhum link disponível</div>
+                    <small class="text-muted">Debug: links={{ topic.links?.length || 'undefined' }}</small>
                   </div>
                 </div>
               </div>
@@ -124,7 +124,7 @@
               <div class="section-card h-100">
                 <h4 class="h5 fw-bold text-dark mb-3 d-flex align-items-center">
                   <i class="fas fa-user text-purple me-2"></i>
-                  Contato de Referência
+                  Contatos de Referência
                 </h4>
                 <div *ngFor="let contact of topic.contacts" class="contact-card p-3 rounded-3 bg-light mb-3 border">
                   <div class="d-flex align-items-start">
@@ -147,9 +147,10 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf="topic.contacts.length === 0" class="text-muted text-center py-3">
-                  <i class="fas fa-user mb-2"></i>
+                <div *ngIf="!topic.contacts || topic.contacts?.length === 0" class="text-muted text-center py-3">
+                  <i class="fas fa-inbox mb-2"></i>
                   <div>Nenhum contato disponível</div>
+                  <small class="text-muted">Debug: contacts={{ topic.contacts?.length || 'undefined' }}</small>
                 </div>
               </div>
             </div>

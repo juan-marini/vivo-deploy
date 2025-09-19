@@ -1,7 +1,7 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule, type ActivatedRoute, Router } from "@angular/router"
-import { TopicService, Topic, Document } from '../../core/services/topic.service'
+import { TopicService, Topic, Document, Contact } from '../../core/services/topic.service'
 import { AuthService } from '../../core/services/auth.service'
 import { FileDownloadService } from '../../core/services/file-download.service'
 
@@ -41,175 +41,19 @@ export class TopicDetailsComponent implements OnInit {
         return;
       }
 
-      // Adicionar links e contatos estáticos baseados no ID do tópico
-      topic.links = this.getLinksForTopic(this.topicId);
-      topic.contacts = this.getContactsForTopic(this.topicId);
-
+      // O backend agora retorna os dados completos com links e contatos
       this.topic = topic;
       console.log('✅ Tópico carregado com links e contatos:', {
         id: topic.id,
         title: topic.title,
         documents: topic.documents?.length || 0,
         links: topic.links?.length || 0,
-        contacts: topic.contacts?.length || 0
+        contacts: topic.contacts?.length || 0,
+        topicCompleto: this.topic
       });
     })
   }
 
-  private getLinksForTopic(topicId: number): Document[] {
-    const linksMap: { [key: number]: Document[] } = {
-      1: [ // Fundamentos de SQL
-        { id: 11, title: 'W3Schools SQL Tutorial', type: 'link', url: 'https://www.w3schools.com/sql/' },
-        { id: 12, title: 'SQLBolt Interactive', type: 'link', url: 'https://sqlbolt.com/' },
-        { id: 13, title: 'SQL Server Documentation', type: 'link', url: 'https://docs.microsoft.com/sql/' }
-      ],
-      2: [ // Oracle Database
-        { id: 21, title: 'Oracle Documentation', type: 'link', url: 'https://docs.oracle.com/database/' },
-        { id: 22, title: 'Oracle Learning Library', type: 'link', url: 'https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/home' }
-      ],
-      3: [ // MongoDB NoSQL
-        { id: 31, title: 'MongoDB University', type: 'link', url: 'https://university.mongodb.com/' },
-        { id: 32, title: 'MongoDB Documentation', type: 'link', url: 'https://docs.mongodb.com/' }
-      ],
-      4: [ // Angular Framework
-        { id: 41, title: 'Angular Official Docs', type: 'link', url: 'https://angular.io/docs' },
-        { id: 42, title: 'Angular CLI Guide', type: 'link', url: 'https://angular.io/cli' }
-      ],
-      5: [ // React Development
-        { id: 51, title: 'React Official Docs', type: 'link', url: 'https://reactjs.org/docs' },
-        { id: 52, title: 'React Hooks Guide', type: 'link', url: 'https://reactjs.org/docs/hooks-intro.html' }
-      ],
-      6: [ // Metodologias Ágeis
-        { id: 61, title: 'Scrum Guide', type: 'link', url: 'https://scrumguides.org/' },
-        { id: 62, title: 'Agile Manifesto', type: 'link', url: 'https://agilemanifesto.org/' }
-      ],
-      7: [ // Testes Unitários
-        { id: 71, title: 'xUnit Documentation', type: 'link', url: 'https://xunit.net/' },
-        { id: 72, title: 'Jest Testing Framework', type: 'link', url: 'https://jestjs.io/' }
-      ],
-      8: [ // Docker e Containers
-        { id: 81, title: 'Docker Documentation', type: 'link', url: 'https://docs.docker.com/' },
-        { id: 82, title: 'Docker Hub', type: 'link', url: 'https://hub.docker.com/' }
-      ],
-      9: [ // Segurança da Informação
-        { id: 91, title: 'OWASP Top 10', type: 'link', url: 'https://owasp.org/www-project-top-ten/' },
-        { id: 92, title: 'Security Best Practices', type: 'link', url: 'https://cheatsheetseries.owasp.org/' }
-      ],
-      10: [ // Power BI
-        { id: 101, title: 'Power BI Learning', type: 'link', url: 'https://powerbi.microsoft.com/learning/' },
-        { id: 102, title: 'Power BI Documentation', type: 'link', url: 'https://docs.microsoft.com/power-bi/' }
-      ],
-      11: [ // UX/UI Design (ID real: 11)
-        { id: 111, title: 'Nielsen Norman Group', type: 'link', url: 'https://www.nngroup.com/' },
-        { id: 112, title: 'Material Design', type: 'link', url: 'https://material.io/design' }
-      ],
-      12: [ // Clean Code (ID real: 12)
-        { id: 121, title: 'Clean Code Principles', type: 'link', url: 'https://clean-code-developer.com/' },
-        { id: 122, title: 'Refactoring Guru', type: 'link', url: 'https://refactoring.guru/' }
-      ],
-      13: [ // Git e Versionamento (ID real: 13)
-        { id: 131, title: 'Git Documentation', type: 'link', url: 'https://git-scm.com/doc' },
-        { id: 132, title: 'Atlassian Git Tutorials', type: 'link', url: 'https://www.atlassian.com/git/tutorials' }
-      ],
-      14: [ // Python para Dados (ID real: 14)
-        { id: 141, title: 'Python Data Science Handbook', type: 'link', url: 'https://jakevdp.github.io/PythonDataScienceHandbook/' },
-        { id: 142, title: 'Pandas Documentation', type: 'link', url: 'https://pandas.pydata.org/docs/' }
-      ],
-      15: [ // Kubernetes (ID real: 15)
-        { id: 151, title: 'Kubernetes Documentation', type: 'link', url: 'https://kubernetes.io/docs/' },
-        { id: 152, title: 'Kubernetes Tutorials', type: 'link', url: 'https://kubernetes.io/docs/tutorials/' }
-      ],
-      16: [ // Liderança e Gestão (ID real: 16)
-        { id: 161, title: 'Harvard Business Review', type: 'link', url: 'https://hbr.org/topic/leadership' },
-        { id: 162, title: 'Management 3.0', type: 'link', url: 'https://management30.com/' }
-      ],
-      17: [ // Machine Learning (ID real: 17)
-        { id: 171, title: 'Google AI Education', type: 'link', url: 'https://ai.google/education/' },
-        { id: 172, title: 'Coursera ML Course', type: 'link', url: 'https://www.coursera.org/learn/machine-learning' }
-      ],
-      18: [ // APIs RESTful (ID real: 18)
-        { id: 181, title: 'REST API Tutorial', type: 'link', url: 'https://restfulapi.net/' },
-        { id: 182, title: 'Postman Learning Center', type: 'link', url: 'https://learning.postman.com/' }
-      ],
-      19: [ // Cybersecurity (ID real: 19)
-        { id: 191, title: 'NIST Cybersecurity Framework', type: 'link', url: 'https://www.nist.gov/cyberframework' },
-        { id: 192, title: 'SANS Institute', type: 'link', url: 'https://www.sans.org/' }
-      ],
-      20: [ // Product Management (ID real: 20)
-        { id: 201, title: 'Product Management Guide', type: 'link', url: 'https://www.productplan.com/learn/' },
-        { id: 202, title: 'Mind the Product', type: 'link', url: 'https://www.mindtheproduct.com/' }
-      ]
-    };
-    return linksMap[topicId] || [];
-  }
-
-  private getContactsForTopic(topicId: number): any[] {
-    const contactsMap: { [key: number]: any[] } = {
-      1: [ // Fundamentos de SQL
-        { id: 11, name: 'Maria Database', role: 'DBA Senior', email: 'maria.db@vivo.com.br', phone: '(11) 9999-1001', department: 'Dados' }
-      ],
-      2: [ // Oracle Database
-        { id: 21, name: 'Carlos Oracle', role: 'Especialista Oracle', email: 'carlos.oracle@vivo.com.br', phone: '(11) 9999-2001', department: 'Dados' }
-      ],
-      3: [ // MongoDB NoSQL
-        { id: 31, name: 'Ana NoSQL', role: 'Developer MongoDB', email: 'ana.nosql@vivo.com.br', phone: '(11) 9999-3001', department: 'Desenvolvimento' }
-      ],
-      4: [ // Angular Framework
-        { id: 41, name: 'Pedro Frontend', role: 'Tech Lead Frontend', email: 'pedro.frontend@vivo.com.br', phone: '(11) 9999-4001', department: 'Desenvolvimento' },
-        { id: 42, name: 'Julia Angular', role: 'Desenvolvedora Angular', email: 'julia.angular@vivo.com.br', phone: '(11) 9999-4002', department: 'Desenvolvimento' }
-      ],
-      5: [ // React Development
-        { id: 51, name: 'Lucas React', role: 'React Developer', email: 'lucas.react@vivo.com.br', phone: '(11) 9999-5001', department: 'Desenvolvimento' }
-      ],
-      6: [ // Metodologias Ágeis
-        { id: 61, name: 'Roberto Agile', role: 'Agile Coach', email: 'roberto.agile@vivo.com.br', phone: '(11) 9999-6001', department: 'Gestão' },
-        { id: 62, name: 'Fernanda Scrum', role: 'Scrum Master', email: 'fernanda.scrum@vivo.com.br', phone: '(11) 9999-6002', department: 'Gestão' }
-      ],
-      7: [ // Testes Unitários
-        { id: 71, name: 'Diana QA', role: 'QA Lead', email: 'diana.qa@vivo.com.br', phone: '(11) 9999-7001', department: 'QA' }
-      ],
-      8: [ // Docker e Containers
-        { id: 81, name: 'Bruno DevOps', role: 'DevOps Engineer', email: 'bruno.devops@vivo.com.br', phone: '(11) 9999-8001', department: 'Infraestrutura' }
-      ],
-      9: [ // Segurança da Informação
-        { id: 91, name: 'Cristina Security', role: 'Security Analyst', email: 'cristina.sec@vivo.com.br', phone: '(11) 9999-9001', department: 'Segurança' }
-      ],
-      10: [ // Power BI
-        { id: 101, name: 'Felipe BI', role: 'BI Developer', email: 'felipe.bi@vivo.com.br', phone: '(11) 9999-1010', department: 'Dados' }
-      ],
-      11: [ // UX/UI Design (ID real: 11)
-        { id: 111, name: 'Isabella Design', role: 'UX/UI Designer', email: 'isabella.design@vivo.com.br', phone: '(11) 9999-2020', department: 'Design' }
-      ],
-      12: [ // Clean Code (ID real: 12)
-        { id: 121, name: 'Eduardo Clean', role: 'Senior Developer', email: 'eduardo.clean@vivo.com.br', phone: '(11) 9999-1111', department: 'Desenvolvimento' }
-      ],
-      13: [ // Git e Versionamento (ID real: 13)
-        { id: 131, name: 'Marina Git', role: 'DevOps Lead', email: 'marina.git@vivo.com.br', phone: '(11) 9999-1212', department: 'Infraestrutura' }
-      ],
-      14: [ // Python para Dados (ID real: 14)
-        { id: 141, name: 'Rafael Python', role: 'Data Scientist', email: 'rafael.python@vivo.com.br', phone: '(11) 9999-1313', department: 'Dados' }
-      ],
-      15: [ // Kubernetes (ID real: 15)
-        { id: 151, name: 'Paula K8s', role: 'Cloud Architect', email: 'paula.k8s@vivo.com.br', phone: '(11) 9999-1414', department: 'Infraestrutura' }
-      ],
-      16: [ // Liderança e Gestão (ID real: 16)
-        { id: 161, name: 'Carlos Manager', role: 'Engineering Manager', email: 'carlos.manager@vivo.com.br', phone: '(11) 9999-1515', department: 'Gestão' }
-      ],
-      17: [ // Machine Learning (ID real: 17)
-        { id: 171, name: 'Amanda ML', role: 'ML Engineer', email: 'amanda.ml@vivo.com.br', phone: '(11) 9999-1616', department: 'Dados' }
-      ],
-      18: [ // APIs RESTful (ID real: 18)
-        { id: 181, name: 'Thiago API', role: 'Backend Developer', email: 'thiago.api@vivo.com.br', phone: '(11) 9999-1717', department: 'Desenvolvimento' }
-      ],
-      19: [ // Cybersecurity (ID real: 19)
-        { id: 191, name: 'Sophia Security', role: 'Cybersecurity Specialist', email: 'sophia.security@vivo.com.br', phone: '(11) 9999-1818', department: 'Segurança' }
-      ],
-      20: [ // Product Management (ID real: 20)
-        { id: 201, name: 'Daniel Product', role: 'Product Manager', email: 'daniel.product@vivo.com.br', phone: '(11) 9999-1919', department: 'Produto' }
-      ]
-    };
-    return contactsMap[topicId] || [];
-  }
 
   onMarkCompleted(): void {
     if (this.topic) {

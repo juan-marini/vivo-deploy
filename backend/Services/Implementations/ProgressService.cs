@@ -225,30 +225,42 @@ namespace backend.Services.Implementations
         {
             var topics = await _context.Topics
                 .Where(t => t.IsActive)
-                .Select(t => new TopicDto
-                {
-                    Id = t.Id,
-                    Title = t.Title,
-                    Description = t.Description,
-                    Category = t.Category ?? "Geral",
-                    EstimatedTime = t.EstimatedTime,
-                    Documents = !string.IsNullOrEmpty(t.PdfUrl) ? new List<TopicDocumentDto>
-                    {
-                        new TopicDocumentDto
-                        {
-                            Id = t.Id,
-                            Title = t.PdfFileName ?? "Documento",
-                            Type = "pdf",
-                            Url = t.PdfUrl,
-                            Size = "2MB"
-                        }
-                    } : new List<TopicDocumentDto>(),
-                    Links = new List<TopicLinkDto>(),
-                    Contacts = new List<TopicContactDto>()
-                })
+                .Include(t => t.Documents)
+                .Include(t => t.Links)
+                .Include(t => t.Contacts)
                 .ToListAsync();
 
-            return topics;
+            return topics.Select(t => new TopicDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                Category = t.Category ?? "Geral",
+                EstimatedTime = t.EstimatedTime,
+                Documents = t.Documents?.Select(d => new TopicDocumentDto
+                {
+                    Id = d.Id,
+                    Title = d.Title,
+                    Type = d.Type,
+                    Url = d.Url,
+                    Size = d.Size ?? "1MB"
+                }).ToList() ?? new List<TopicDocumentDto>(),
+                Links = t.Links?.Select(l => new TopicLinkDto
+                {
+                    Id = l.Id,
+                    Title = l.Title,
+                    Url = l.Url
+                }).ToList() ?? new List<TopicLinkDto>(),
+                Contacts = t.Contacts?.Select(c => new TopicContactDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Role = c.Role,
+                    Email = c.Email,
+                    Phone = c.Phone,
+                    Department = c.Department
+                }).ToList() ?? new List<TopicContactDto>()
+            }).ToList();
         }
 
         private bool HasStartedTopic(string userId, int topicId)
