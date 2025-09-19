@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://BACKEND_URL_PLACEHOLDER/api'
+  apiUrl: 'https://vivo-deploy-1.onrender.com/api'
 };
