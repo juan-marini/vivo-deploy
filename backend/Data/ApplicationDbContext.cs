@@ -16,7 +16,7 @@ namespace backend.Data
         public DbSet<TopicLink> TopicLinks { get; set; }
         public DbSet<TopicContact> TopicContacts { get; set; }
         public DbSet<MemberProgress> MemberProgresses { get; set; }
-        // public DbSet<Activity> Activities { get; set; } // Commented out - table may not exist
+        public DbSet<Activity> Activities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +44,18 @@ namespace backend.Data
                 .HasForeignKey(s => s.UsuarioId);
 
             // Configuração das tabelas de Topics
+            modelBuilder.Entity<Topic>()
+                .ToTable("topics");
+
+            modelBuilder.Entity<TopicDocument>()
+                .ToTable("topicdocuments");
+
+            modelBuilder.Entity<TopicLink>()
+                .ToTable("links_uteis");
+
+            modelBuilder.Entity<TopicContact>()
+                .ToTable("contatos_referencia");
+
             modelBuilder.Entity<Topic>()
                 .HasMany(t => t.Documents)
                 .WithOne(d => d.Topic)
@@ -103,26 +115,45 @@ namespace backend.Data
                 .HasPrincipalKey(u => u.Email)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Configuração da tabela Activity (commented out - table may not exist)
-            /*
+            // Configuração da tabela Activity
+            modelBuilder.Entity<Activity>()
+                .ToTable("activities");
+
+            modelBuilder.Entity<Activity>()
+                .Property(a => a.UserId)
+                .HasColumnName("user_id");
+
+            modelBuilder.Entity<Activity>()
+                .Property(a => a.Action)
+                .HasColumnName("action");
+
+            modelBuilder.Entity<Activity>()
+                .Property(a => a.TopicTitle)
+                .HasColumnName("topic_title");
+
+            modelBuilder.Entity<Activity>()
+                .Property(a => a.Type)
+                .HasColumnName("type");
+
+            modelBuilder.Entity<Activity>()
+                .Property(a => a.Date)
+                .HasColumnName("date");
+
             modelBuilder.Entity<Activity>()
                 .HasOne(a => a.User)
                 .WithMany()
                 .HasForeignKey(a => a.UserId)
                 .HasPrincipalKey(u => u.Email)
                 .OnDelete(DeleteBehavior.Cascade);
-            */
 
             // Índices
             modelBuilder.Entity<MemberProgress>()
                 .HasIndex(mp => new { mp.UserId, mp.TopicId })
                 .IsUnique();
 
-            // Activity index commented out - table may not exist
-            /*
+            // Activity indices
             modelBuilder.Entity<Activity>()
                 .HasIndex(a => new { a.UserId, a.Date });
-            */
 
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Email)

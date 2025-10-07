@@ -1,7 +1,7 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule, type ActivatedRoute, Router } from "@angular/router"
-import { TopicService, Topic, Document } from '../../core/services/topic.service'
+import { TopicService, Topic, Document, Contact } from '../../core/services/topic.service'
 import { AuthService } from '../../core/services/auth.service'
 import { FileDownloadService } from '../../core/services/file-download.service'
 
@@ -35,21 +35,25 @@ export class TopicDetailsComponent implements OnInit {
     console.log('🔍 Carregando tópico ID:', this.topicId);
     this.topicService.getTopicById(this.topicId).subscribe(topic => {
       console.log('📄 Tópico recebido:', topic);
-      this.topic = topic
-      if (!this.topic) {
+      if (!topic) {
         console.log('❌ Tópico não encontrado, redirecionando...');
         this.router.navigate(['/home'])
-      } else {
-        console.log('✅ Tópico carregado:', {
-          id: topic.id,
-          title: topic.title,
-          documents: topic.documents?.length || 0,
-          links: topic.links?.length || 0,
-          contacts: topic.contacts?.length || 0
-        });
+        return;
       }
+
+      // O backend agora retorna os dados completos com links e contatos
+      this.topic = topic;
+      console.log('✅ Tópico carregado com links e contatos:', {
+        id: topic.id,
+        title: topic.title,
+        documents: topic.documents?.length || 0,
+        links: topic.links?.length || 0,
+        contacts: topic.contacts?.length || 0,
+        topicCompleto: this.topic
+      });
     })
   }
+
 
   onMarkCompleted(): void {
     if (this.topic) {

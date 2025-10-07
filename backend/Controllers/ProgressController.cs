@@ -99,12 +99,23 @@ namespace backend.Controllers
         {
             try
             {
+                Console.WriteLine("🔍 Fetching topics from database...");
                 var topics = await _progressService.GetAllTopicsAsync();
+                Console.WriteLine($"✅ Retrieved {topics.Count} topics successfully");
                 return Ok(topics);
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error retrieving topics: {ex.Message}");
+                Console.WriteLine($"❌ Error in GetAllTopics: {ex.Message}");
+                Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
+                Console.WriteLine($"❌ Inner exception: {ex.InnerException?.Message}");
+
+                return BadRequest(new {
+                    error = "Error retrieving topics",
+                    message = ex.Message,
+                    innerError = ex.InnerException?.Message,
+                    timestamp = DateTime.UtcNow
+                });
             }
         }
 
@@ -1390,6 +1401,78 @@ namespace backend.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Erro ao atualizar PDFs do .NET Core: {ex.Message}");
+            }
+        }
+
+        [HttpPost("create-links-contacts-tables")]
+        public async Task<ActionResult> CreateLinksContactsTables()
+        {
+            try
+            {
+                var results = new List<string>();
+                results.Add("🔧 Criando tabelas links_uteis e contatos_referencia...");
+
+                // Criar tabela links_uteis
+                await _context.Database.ExecuteSqlRawAsync(@"
+                    CREATE TABLE IF NOT EXISTS links_uteis (
+                        Id INT AUTO_INCREMENT PRIMARY KEY,
+                        TopicId INT NOT NULL,
+                        Title VARCHAR(200) NOT NULL,
+                        Url VARCHAR(500) NOT NULL,
+                        INDEX idx_topicid (TopicId),
+                        FOREIGN KEY (TopicId) REFERENCES topics(Id) ON DELETE CASCADE
+                    )
+                ");
+                results.Add("✅ Tabela links_uteis criada");
+
+                // Criar tabela contatos_referencia
+                await _context.Database.ExecuteSqlRawAsync(@"
+                    CREATE TABLE IF NOT EXISTS contatos_referencia (
+                        Id INT AUTO_INCREMENT PRIMARY KEY,
+                        TopicId INT NOT NULL,
+                        Name VARCHAR(200) NOT NULL,
+                        Role VARCHAR(200) NOT NULL,
+                        Email VARCHAR(200) NOT NULL,
+                        Phone VARCHAR(20),
+                        Department VARCHAR(100),
+                        INDEX idx_topicid (TopicId),
+                        FOREIGN KEY (TopicId) REFERENCES topics(Id) ON DELETE CASCADE
+                    )
+                ");
+                results.Add("✅ Tabela contatos_referencia criada");
+
+                // Popular com alguns dados de exemplo
+                await _context.Database.ExecuteSqlRawAsync(@"
+                    INSERT INTO links_uteis (TopicId, Title, Url) VALUES
+                    (1, 'Microsoft .NET Documentation', 'https://docs.microsoft.com/dotnet'),
+                    (1, 'C# Programming Guide', 'https://docs.microsoft.com/dotnet/csharp'),
+                    (2, 'Clean Architecture Book', 'https://cleancoders.com'),
+                    (2, 'SOLID Principles', 'https://blog.cleancoder.com'),
+                    (3, 'Entity Framework Core', 'https://docs.microsoft.com/ef'),
+                    (3, 'Database Design', 'https://www.postgresql.org/docs')
+                ");
+                results.Add("✅ Links úteis de exemplo inseridos");
+
+                await _context.Database.ExecuteSqlRawAsync(@"
+                    INSERT INTO contatos_referencia (TopicId, Name, Role, Email, Phone, Department) VALUES
+                    (1, 'Lucas Desenvolvedor', 'Tech Lead .NET', 'lucas.dev@vivo.com.br', '(11) 9999-1001', 'Desenvolvimento'),
+                    (1, 'Maria Santos', 'Senior Developer', 'maria.santos@vivo.com.br', '(11) 9999-1002', 'Desenvolvimento'),
+                    (2, 'Pedro Arquiteto', 'Software Architect', 'pedro.arch@vivo.com.br', '(11) 9999-2001', 'Desenvolvimento'),
+                    (3, 'Ana Database', 'Database Specialist', 'ana.db@vivo.com.br', '(11) 9999-3001', 'Dados')
+                ");
+                results.Add("✅ Contatos de referência de exemplo inseridos");
+
+                results.Add("🎉 Tabelas criadas e populadas com sucesso!");
+
+                return Ok(new {
+                    success = true,
+                    message = "Tables created and populated successfully",
+                    details = results
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao criar tabelas: {ex.Message}");
             }
         }
     }

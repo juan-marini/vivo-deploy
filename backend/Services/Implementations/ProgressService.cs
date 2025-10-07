@@ -159,103 +159,152 @@ namespace backend.Services.Implementations
                 _context.MemberProgresses.Add(newProgress);
             }
 
-            // Add activity (commented out - table may not exist)
-            /*
-            var topic = await _context.Topics.FindAsync(topicId);
-            if (topic != null)
+            // Add activity for topic completion
+            try
             {
-                var activity = new Activity
+                var topic = await _context.Topics.FindAsync(topicId);
+                if (topic != null)
                 {
-                    UserId = memberId,
-                    Action = "Concluiu o tópico",
-                    TopicTitle = topic.Title,
-                    Type = "completed",
-                    Date = DateTime.UtcNow
-                };
-                _context.Activities.Add(activity);
+                    var activity = new Activity
+                    {
+                        UserId = memberId,
+                        Action = "Concluiu o tópico",
+                        TopicTitle = topic.Title,
+                        Type = "completed",
+                        Date = DateTime.UtcNow
+                    };
+                    _context.Activities.Add(activity);
+                }
             }
-            */
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error adding activity for topic completion: {ex.Message}");
+            }
 
             await _context.SaveChangesAsync();
         }
 
         public async Task AddActivityAsync(string memberId, ActivityItemDto activityDto)
         {
-            // Activity functionality disabled - table may not exist
-            /*
-            var activity = new Activity
+            try
             {
-                UserId = memberId,
-                Action = activityDto.Action,
-                TopicTitle = activityDto.TopicTitle,
-                Type = activityDto.Type,
-                Date = DateTime.Parse(activityDto.Date)
-            };
+                var activity = new Activity
+                {
+                    UserId = memberId,
+                    Action = activityDto.Action,
+                    TopicTitle = activityDto.TopicTitle,
+                    Type = activityDto.Type,
+                    Date = !string.IsNullOrEmpty(activityDto.Date) ? DateTime.Parse(activityDto.Date) : DateTime.UtcNow
+                };
 
-            _context.Activities.Add(activity);
-            await _context.SaveChangesAsync();
-            */
-            await Task.CompletedTask; // Placeholder to maintain async signature
+                _context.Activities.Add(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in AddActivityAsync: {ex.Message}");
+            }
         }
 
         public async Task<List<ActivityItemDto>> GetMemberActivityAsync(string memberId)
         {
-            // Return empty list since Activities table may not exist
-            /*
-            var activities = await _context.Activities
-                .Where(a => a.UserId == memberId)
-                .OrderByDescending(a => a.Date)
-                .Take(20)
-                .Select(a => new ActivityItemDto
-                {
-                    Date = a.Date.ToString("yyyy-MM-dd"),
-                    Action = a.Action,
-                    TopicTitle = a.TopicTitle,
-                    Type = a.Type
-                })
-                .ToListAsync();
+            try
+            {
+                var activities = await _context.Activities
+                    .Where(a => a.UserId == memberId)
+                    .OrderByDescending(a => a.Date)
+                    .Take(20)
+                    .Select(a => new ActivityItemDto
+                    {
+                        Date = a.Date.ToString("yyyy-MM-dd"),
+                        Action = a.Action,
+                        TopicTitle = a.TopicTitle,
+                        Type = a.Type
+                    })
+                    .ToListAsync();
 
-            return activities;
-            */
-            await Task.CompletedTask; // Placeholder
-            return new List<ActivityItemDto>(); // Return empty list
+                return activities;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in GetMemberActivityAsync: {ex.Message}");
+                return new List<ActivityItemDto>(); // Return empty list on error
+            }
         }
 
         public async Task<List<TopicDto>> GetAllTopicsAsync()
         {
-            var topics = await _context.Topics
-                .Where(t => t.IsActive)
-                .Select(t => new TopicDto
+            try
+            {
+                Console.WriteLine("📊 Starting GetAllTopicsAsync...");
+
+                // First, try to get topics without includes to test basic connectivity
+                var topicsBasic = await _context.Topics
+                    .Where(t => t.IsActive)
+                    .ToListAsync();
+
+                Console.WriteLine($"📋 Found {topicsBasic.Count} active topics");
+
+                // Try to load with related entities
+                List<Topic> topics;
+                try
+                {
+                    topics = await _context.Topics
+                        .Where(t => t.IsActive)
+                        .Include(t => t.Documents)
+                        .Include(t => t.Links)
+                        .Include(t => t.Contacts)
+                        .ToListAsync();
+                    Console.WriteLine("✅ Successfully loaded topics with related entities");
+                }
+                catch (Exception includeEx)
+                {
+                    Console.WriteLine($"⚠️ Error loading with includes: {includeEx.Message}");
+                    Console.WriteLine("🔄 Falling back to basic topics without related entities");
+                    topics = topicsBasic;
+                }
+
+                var result = topics.Select(t => new TopicDto
                 {
                     Id = t.Id,
                     Title = t.Title,
                     Description = t.Description,
                     Category = t.Category ?? "Geral",
                     EstimatedTime = t.EstimatedTime,
-                    Documents = new List<TopicDocumentDto>(),
-                    Links = new List<TopicLinkDto>(),
-                    Contacts = new List<TopicContactDto>()
-                })
-                .ToListAsync();
-
-            // Add documents manually after the query
-            foreach (var topic in topics)
-            {
-                var topicEntity = await _context.Topics.FirstOrDefaultAsync(t => t.Id == topic.Id);
-                if (topicEntity != null && !string.IsNullOrEmpty(topicEntity.PdfUrl))
-                {
-                    topic.Documents.Add(new TopicDocumentDto
+                    Documents = t.Documents?.Select(d => new TopicDocumentDto
                     {
-                        Id = topicEntity.Id,
-                        Title = topicEntity.PdfFileName ?? "Documento",
-                        Type = "pdf",
-                        Url = topicEntity.PdfUrl,
-                        Size = "2MB"
-                    });
-                }
-            }
+                        Id = d.Id,
+                        Title = d.Title,
+                        Type = d.Type,
+                        Url = d.Url,
+                        Size = d.Size ?? "1MB"
+                    }).ToList() ?? new List<TopicDocumentDto>(),
+                    Links = t.Links?.Select(l => new TopicLinkDto
+                    {
+                        Id = l.Id,
+                        Title = l.Title,
+                        Url = l.Url
+                    }).ToList() ?? new List<TopicLinkDto>(),
+                    Contacts = t.Contacts?.Select(c => new TopicContactDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Role = c.Role,
+                        Email = c.Email,
+                        Phone = c.Phone,
+                        Department = c.Department
+                    }).ToList() ?? new List<TopicContactDto>()
+                }).ToList();
 
-            return topics;
+                Console.WriteLine($"✅ Returning {result.Count} topics");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in GetAllTopicsAsync: {ex.Message}");
+                Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         private bool HasStartedTopic(string userId, int topicId)
